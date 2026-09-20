@@ -291,3 +291,21 @@
 .six-up .job-card-qr{display:block;width:15mm;height:15mm;object-fit:contain;margin:0 auto}
 .six-up .qr-caption{font-size:4.5px;font-weight:900;letter-spacing:.25px;margin-top:.5mm;color:#4f5d66}
 @media print{.six-up .preprinted-code-box{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+
+/* =========================================
+   SIX-UP BARCODE OVERRIDE — SCALE 1.8X
+   ========================================= */
+
+.six-up .job-card-barcode {
+    display: block !important;
+    width: 100% !important;
+    height: 10mm !important;
+    object-fit: fill !important;
+
+    transform: scaleX(1.8) !important;
+    transform-origin: center center !important;
+
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
