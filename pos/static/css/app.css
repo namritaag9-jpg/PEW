@@ -150,64 +150,12 @@
     overflow: hidden !important;
 }
 
-/* Exact label dimensions */
-.small-sticker {
-    width: 38.1mm !important;
-    height: 21.2mm !important;
+/* ===== EXACT 65-LABEL A4 LAYOUT ===== */
 
-    box-sizing: border-box !important;
-    margin: 0 !important;
-    padding: 0.4mm !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    gap: 0 !important;
-    overflow: hidden !important;
-}
-
-/* Large barcode */
-.small-sticker .barcode-img {
-    display: block !important;
-
-    width: 36.8mm !important;
-    max-width: 36.8mm !important;
-
-    height: 15mm !important;
-    max-height: 15mm !important;
-
-    margin: 0 auto !important;
-    object-fit: fill !important;
-}
-
-/* Small serial number */
-.small-sticker strong {
-    font-size: 4.5px !important;
-    line-height: 1 !important;
-    margin-top: 0.4mm !important;
-    white-space: nowrap !important;
-}
-
-/* Cut-line border */
-.small-sticker {
-    border: 0.1mm dotted #999 !important;
-}
-
-/* Print alignment */
 @media print {
     @page {
-        size: A4 portrait;
+        size: A4;
         margin: 0;
-    }
-
-    html,
-    body {
-        width: 210mm !important;
-        height: 297mm !important;
-        margin: 0 !important;
-        padding: 0 !important;
     }
 
     .sticker-sheet-document {
@@ -215,15 +163,60 @@
         height: 297mm !important;
         margin: 0 !important;
         padding: 10.7mm 4.75mm !important;
+        box-sizing: border-box !important;
     }
 
     .sheet65 {
         width: 200.5mm !important;
         height: 275.6mm !important;
-        page-break-after: always !important;
+
+        display: grid !important;
+        grid-template-columns: repeat(5, 38.1mm) !important;
+        grid-template-rows: repeat(13, 21.2mm) !important;
+
+        column-gap: 2.5mm !important;
+        row-gap: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
     }
 
-    .sheet65:last-child {
-        page-break-after: auto !important;
+    .small-sticker {
+        box-sizing: border-box !important;
+        width: 38.1mm !important;
+        height: 21.2mm !important;
+
+        padding: 0.8mm !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.3mm !important;
+        overflow: hidden !important;
+    }
+
+    /* Longer, centred barcode */
+    .small-sticker .barcode,
+    .small-sticker .barcode-img {
+        display: block !important;
+        width: 36.5mm !important;
+        max-width: 36.5mm !important;
+        height: 10.5mm !important;
+
+        margin: 0 auto !important;
+        object-fit: fill !important;
+        object-position: center !important;
+    }
+
+    /* Reduce excessive space between barcode and text */
+    .small-sticker .serial,
+    .small-sticker .barcode-text,
+    .small-sticker .item-text {
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 1 !important;
+        font-size: 5.5pt !important;
+        text-align: center !important;
     }
 }
