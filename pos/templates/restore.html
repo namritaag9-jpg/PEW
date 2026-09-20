@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block title %}Restore Backup{% endblock %}{% block content %}
+<section class="card restore-card"><div class="cardhead"><h3>Restore database backup</h3></div>
+<p class="muted">Upload a previously downloaded Patel POS SQLite backup (.db). The current database will be saved automatically before replacement.</p>
+<form method="post" enctype="multipart/form-data" class="form" onsubmit="return confirm('Restore this backup? The current database will be backed up first, but the active data will be replaced.');"><label>SQLite backup file<input type="file" name="backup_file" accept=".db,application/octet-stream" required></label><button class="primary">Restore Backup</button></form>
+<p class="hint">Only administrators can restore backups. After restoring, check jobs, payments, inventory, and users.</p></section>{% endblock %}
