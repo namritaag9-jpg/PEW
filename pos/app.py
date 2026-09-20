@@ -497,7 +497,7 @@ def blank_job_cards():
 def barcode_svg(value):
     value=(value or "").strip()[:80]
     if not value: return "", 400
-    drawing=createBarcodeDrawing("Code128", value=value, barHeight=35, barWidth=0.71, humanReadable=False)
+    drawing=createBarcodeDrawing("Code128", value=value, barHeight=35, barWidth=0.75, humanReadable=False)
     return renderSVG.drawToString(drawing), 200, {"Content-Type":"image/svg+xml; charset=utf-8","Cache-Control":"no-store"}
 
 @app.route("/qr/<path:value>.png")
