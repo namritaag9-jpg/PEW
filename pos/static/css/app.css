@@ -120,13 +120,28 @@
 .restore-card{max-width:720px}.restore-card input[type=file]{padding:12px;background:#f8fafb}.loginbox .toast{margin:10px 0}
 
 /* =========================================
-   FINAL 38.10 × 21.20 MM BARCODE LABEL
+   A4 65-UP STICKER SHEET
+   Label: 38.10mm × 21.20mm
+   5 columns × 13 rows
    ========================================= */
+
+.sticker-sheet-document {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 10.7mm 9.75mm !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
 
 .sheet65 {
     width: 190.5mm !important;
     height: 275.6mm !important;
 
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: grid !important;
     grid-template-columns: repeat(5, 38.1mm) !important;
     grid-template-rows: repeat(13, 21.2mm) !important;
 
@@ -139,8 +154,8 @@
     height: 21.2mm !important;
 
     box-sizing: border-box !important;
-    padding: 0.4mm !important;
     margin: 0 !important;
+    padding: 0.5mm !important;
 
     display: flex !important;
     flex-direction: column !important;
@@ -151,28 +166,54 @@
     overflow: hidden !important;
 }
 
-/* Large barcode */
+/* Barcode fills almost the entire label */
 .small-sticker .barcode-img {
     display: block !important;
+    width: 36.8mm !important;
+    max-width: 36.8mm !important;
 
-    width: 37mm !important;
-    max-width: none !important;
-
-    height: 14.5mm !important;
-    max-height: 14.5mm !important;
-
-    object-fit: fill !important;
-
-    transform: scaleX(1.18) !important;
-    transform-origin: center center !important;
+    height: 15mm !important;
+    max-height: 15mm !important;
 
     margin: 0 auto !important;
+    object-fit: fill !important;
 }
 
-/* Small serial number */
+/* Tiny serial number */
 .small-sticker strong {
     font-size: 4.5px !important;
     line-height: 1 !important;
     margin-top: 0.4mm !important;
     white-space: nowrap !important;
+}
+
+/* Print alignment */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    html,
+    body {
+        width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .sticker-sheet-document {
+        width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 !important;
+        padding: 10.7mm 9.75mm !important;
+    }
+
+    .sheet65 {
+        page-break-after: always;
+    }
+
+    .sheet65:last-child {
+        page-break-after: auto;
+    }
 }
