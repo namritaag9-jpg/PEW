@@ -933,7 +933,7 @@ let currentQuery = "";
  *
  * Uses your existing public tracking API.
  */
-const TRACK_API = "/api/public/track";
+ TRACK_API = "/api/customer-track";
 
 
 /* =========================================
@@ -959,7 +959,7 @@ function text(value, fallback = "—") {
 
 function showMessage(message, type = "error") {
 
-    const el = $("message");
+     el = $("message");
 
     el.textContent = message;
     el.className = "message " + type;
@@ -981,11 +981,11 @@ function clearMessage() {
 
 async function trackRepair(value = null) {
 
-    const inputValue = value !== null
+     inputValue = value !== null
         ? value
         : $("searchInput").value.trim();
 
-    const query = String(inputValue).trim();
+     query = String(inputValue).trim();
 
     clearMessage();
 
@@ -1002,7 +1002,7 @@ async function trackRepair(value = null) {
 
     currentQuery = query;
 
-    const button = $("trackButton");
+     button = $("trackButton");
 
     button.disabled = true;
     button.textContent = "Searching...";
@@ -1016,9 +1016,9 @@ async function trackRepair(value = null) {
          *
          * This format supports q=VALUE.
          */
-        const url = TRACK_API + "?q=" + encodeURIComponent(query);
+         url = TRACK_API + "?q=" + encodeURIComponent(query);
 
-        const response = await fetch(url, {
+         response = await fetch(url, {
             method: "GET",
             headers: {
                 "Accept": "application/json"
@@ -1049,7 +1049,7 @@ async function trackRepair(value = null) {
          * use it. If it returns { job: {...} },
          * use the nested object.
          */
-        const job = data.job || data.data || data;
+         job = data.job || data.data || data;
 
         renderResult(job);
 
@@ -1079,16 +1079,16 @@ async function trackRepair(value = null) {
 
 function renderResult(job) {
 
-    const status = text(
+     status = text(
         job.status || job.current_status,
         "Unknown"
     );
 
-    const serial = text(
+     serial = text(
         job.serial || job.serial_no || job.serial_number
     );
 
-    const jobNo = text(
+     jobNo = text(
         job.job_no ||
         job.job_id ||
         job.job_number ||
@@ -1127,7 +1127,7 @@ function renderResult(job) {
         "Not delivered"
     );
 
-    const progress = calculateProgress(status);
+     progress = calculateProgress(status);
 
     $("progressFill").style.width = progress + "%";
 
@@ -1143,7 +1143,7 @@ function renderResult(job) {
    STATUS LOGIC
    ========================================= */
 
-const statuses = [
+ statuses = [
     {
         name: "Received",
         description: "Your appliance has been received."
@@ -1180,7 +1180,7 @@ const statuses = [
 
 function normalizeStatus(status) {
 
-    const value = String(status)
+     value = String(status)
         .toLowerCase()
         .trim();
 
@@ -1227,7 +1227,7 @@ function normalizeStatus(status) {
 
 function calculateProgress(status) {
 
-    const value = String(status).toLowerCase();
+     value = String(status).toLowerCase();
 
     if (
         value.includes("cancel") ||
@@ -1236,7 +1236,7 @@ function calculateProgress(status) {
         return 0;
     }
 
-    const index = normalizeStatus(status);
+     index = normalizeStatus(status);
 
     return Math.round(
         ((index + 1) / statuses.length) * 100
@@ -1247,40 +1247,40 @@ function calculateProgress(status) {
 
 function renderTimeline(status) {
 
-    const activeIndex = normalizeStatus(status);
+     activeIndex = normalizeStatus(status);
 
-    const container = $("timelineContainer");
+     container = $("timelineContainer");
 
     container.innerHTML = "";
 
     statuses.forEach((item, index) => {
 
-        const completed = index < activeIndex;
-        const current = index === activeIndex;
+         completed = index < activeIndex;
+         current = index === activeIndex;
 
-        const wrapper = document.createElement("div");
+         wrapper = document.createElement("div");
 
         wrapper.className =
             "timeline-item" +
             (completed ? " completed" : "") +
             (current ? " current" : "");
 
-        const marker = document.createElement("div");
+         marker = document.createElement("div");
 
         marker.className = "timeline-marker";
 
         marker.textContent =
             completed ? "✓" : (index + 1);
 
-        const content = document.createElement("div");
+         content = document.createElement("div");
 
         content.className = "timeline-content";
 
-        const title = document.createElement("h4");
+         title = document.createElement("h4");
 
         title.textContent = item.name;
 
-        const description = document.createElement("p");
+         description = document.createElement("p");
 
         description.textContent = current
             ? "Current status: " + item.description
@@ -1334,7 +1334,7 @@ async function startScanner() {
             },
             (decodedText) => {
 
-                const value = decodedText.trim();
+                 value = decodedText.trim();
 
                 if (!value) {
                     return;
