@@ -67,6 +67,7 @@ def init_db():
       items_json TEXT, payments_json TEXT
     );
     CREATE TABLE IF NOT EXISTS serial_registry(id INTEGER PRIMARY KEY,serial TEXT UNIQUE NOT NULL,job_id INTEGER UNIQUE,created_at TEXT, FOREIGN KEY(job_id) REFERENCES jobs(id) ON DELETE SET NULL);
+    CREATE TABLE IF NOT EXISTS print_batches(id INTEGER PRIMARY KEY, print_type TEXT NOT NULL, batch_no INTEGER NOT NULL, serials_json TEXT NOT NULL, created_at TEXT, UNIQUE(print_type,batch_no));
     """)
     if not c.execute("SELECT 1 FROM users LIMIT 1").fetchone():
         c.execute("INSERT INTO users(username,password,role) VALUES(?,?,?)",("admin",generate_password_hash("admin"),"admin"))
@@ -218,7 +219,7 @@ def deleted_jobs():
 
 @app.route("/track", methods=["GET"])
 def customer_tracking():
-    return render_template("customer_tracking.html")
+    return render_template("customer_tracking.html", initial_query=(request.args.get("q") or "").strip()[:80])
 
 
 @app.route("/api/customer-track", methods=["GET"])
@@ -320,14 +321,28 @@ def customers():
     rows=c.execute("SELECT * FROM customers WHERE name LIKE ? OR phone LIKE ? ORDER BY id DESC",("%"+q+"%","%"+q+"%")).fetchall()
     c.close(); return render_template("customers.html",customers=rows,q=q)
 
-def next_serial(c):
-    row=c.execute("SELECT serial FROM serial_registry WHERE serial LIKE 'PE-S%' ORDER BY id DESC LIMIT 1").fetchone()
-    n=1
-    if row:
-        m=re.search(r"(\d+)$", row["serial"] or "")
-        if m: n=int(m.group(1))+1
-    while c.execute("SELECT 1 FROM serial_registry WHERE serial=?",(f"PE-S{n:06d}",)).fetchone(): n+=1
-    return f"PE-S{n:06d}"
+def next_stream_serial(c, print_type):
+    """Return the next PE-XXXXXX serial for one independent print stream.
+
+    Job-card and label counters are independent, while both use the same
+    visible PE-XXXXXX format. Job-card serials are printed only; label serials
+    are registered for later barcode allocation.
+    """
+    rows = c.execute(
+        "SELECT serials_json FROM print_batches WHERE print_type=?",
+        (print_type,)
+    ).fetchall()
+    n = 1
+    for row in rows:
+        try:
+            values = json.loads(row["serials_json"] or "[]")
+        except (TypeError, ValueError):
+            values = []
+        for value in values:
+            m = re.search(r"(\d+)$", str(value or ""))
+            if m:
+                n = max(n, int(m.group(1)) + 1)
+    return f"PE-{n:06d}"
 
 @app.route("/jobs/new",methods=["GET","POST"])
 @login_required
@@ -614,7 +629,10 @@ def print_job(jid):
     items=c.execute("SELECT * FROM items WHERE job_id=? ORDER BY id",(jid,)).fetchall()
     pays=c.execute("SELECT * FROM payments WHERE job_id=? ORDER BY id",(jid,)).fetchall(); c.close()
     subtotal=sum((x["qty"] or 0)*(x["rate"] or 0) for x in items); total=max(0,subtotal-(j["discount"] or 0)); paid=sum(x["amount"] for x in pays)
-    return render_template("print_job.html",j=j,items=items,subtotal=subtotal,total=total,paid=paid,balance=max(0,total-paid))
+    tracking_url = url_for("customer_tracking", q=j["job_no"], _external=True)
+    return render_template("print_job.html", j=j, items=items, subtotal=subtotal,
+                           total=total, paid=paid, balance=max(0,total-paid),
+                           tracking_url=tracking_url)
 
 @app.route("/search")
 @login_required
@@ -633,10 +651,43 @@ def stickers(jid):
 @app.route("/print/job-cards")
 @login_required
 def blank_job_cards():
-    return render_template("blank_job_cards.html", card_count=6)
+    """Print independent, persistent 6-card batches."""
+    try:
+        batch_no=max(1, int(request.args.get("batch", 1) or 1))
+    except (TypeError, ValueError):
+        batch_no=1
+    c=db()
+    row=c.execute("SELECT serials_json FROM print_batches WHERE print_type=? AND batch_no=?", ("job_cards", batch_no)).fetchone()
+    if row:
+        serials=json.loads(row["serials_json"] or "[]")
+        # Repair batches created by the earlier bug where all 6 cards had one serial.
+        if len(serials) != 6 or len(set(serials)) != 6:
+            first_number=int(re.search(r"(\d+)$", str(serials[0] if serials else next_stream_serial(c, "job_cards"))).group(1))
+            serials=[f"PE-{first_number + offset:06d}" for offset in range(6)]
+            c.execute("UPDATE print_batches SET serials_json=? WHERE print_type=? AND batch_no=?", (json.dumps(serials),"job_cards",batch_no))
+            c.commit()
+    else:
+        # Reserve a unique, continuous serial range for this 6-card batch.
+        first_serial=next_stream_serial(c, "job_cards")
+        first_number=int(re.search(r"(\d+)$", first_serial).group(1))
+        serials=[f"PE-{first_number + offset:06d}" for offset in range(6)]
+        c.execute("INSERT INTO print_batches(print_type,batch_no,serials_json,created_at) VALUES(?,?,?,?)", ("job_cards",batch_no,json.dumps(serials),now()))
+        c.commit()
+    c.close()
+    cards=[{"serial":serial,"barcode_url":url_for("barcode_svg", value=serial),
+            "tracking_url":url_for("customer_tracking", q=serial, _external=True),
+            "qr_url":url_for("qr_png", value=url_for("customer_tracking", q=serial, _external=True))} for serial in serials]
+    return render_template("blank_job_cards.html", cards=cards, card_count=6, series_no=batch_no, batch_no=batch_no)
+
+@app.route("/print/job-cards/continue", methods=["POST"])
+@login_required
+def continue_job_card_batch():
+    c=db()
+    last=c.execute("SELECT COALESCE(MAX(batch_no),0) n FROM print_batches WHERE print_type=?", ("job_cards",)).fetchone()["n"]
+    c.close()
+    return redirect(url_for("blank_job_cards", batch=last+1))
 
 @app.route("/barcode/<path:value>.svg")
-@login_required
 def barcode_svg(value):
     value=(value or "").strip()[:80]
     if not value: return "", 400
@@ -644,7 +695,6 @@ def barcode_svg(value):
     return renderSVG.drawToString(drawing), 200, {"Content-Type":"image/svg+xml; charset=utf-8","Cache-Control":"no-store"}
 
 @app.route("/qr/<path:value>.png")
-@login_required
 def qr_png(value):
     value=(value or "").strip()[:80]
     if not value: return "", 400
@@ -655,51 +705,42 @@ def qr_png(value):
 @app.route("/print/sticker-sheet")
 @login_required
 def sticker_sheet():
-    """Print the pre-generated serial pool, two physical stickers per serial.
-    A 65-position sheet contains 32 serials (64 stickers) plus one blank slot.
-    Serial rows are created independently of jobs and become allocated later by scanning.
-    """
+    """Print independent, persistent 65-label batches."""
+    try:
+        batch_no=max(1, int(request.args.get("batch", 1) or 1))
+    except (TypeError, ValueError):
+        batch_no=1
     c=db()
-    serials=c.execute("""SELECT sr.serial, sr.job_id, sr.created_at,
-                              j.job_no, j.appliance
-                       FROM serial_registry sr
-                       LEFT JOIN jobs j ON j.id=sr.job_id
-                       ORDER BY sr.id""").fetchall()
+    row=c.execute("SELECT serials_json FROM print_batches WHERE print_type=? AND batch_no=?", ("labels",batch_no)).fetchone()
+    if row:
+        serials=json.loads(row["serials_json"])
+    else:
+        serials=[]
+        # Reserve a unique, continuous 65-label range for the label stream only.
+        first_serial=next_stream_serial(c, "labels")
+        first_number=int(re.search(r"(\d+)$", first_serial).group(1))
+        number=first_number
+        while len(serials) < 65:
+            serial=f"PE-{number:06d}"
+            exists=c.execute("SELECT 1 FROM serial_registry WHERE serial=?", (serial,)).fetchone()
+            if not exists:
+                c.execute("INSERT INTO serial_registry(serial,job_id,created_at) VALUES(?,?,?)", (serial,None,now()))
+                serials.append(serial)
+            number += 1
+        c.execute("INSERT INTO print_batches(print_type,batch_no,serials_json,created_at) VALUES(?,?,?,?)", ("labels",batch_no,json.dumps(serials),now()))
+        c.commit()
     c.close()
-    serials_per_sheet=32
-    page_no=max(1, int(request.args.get('page', 1) or 1))
-    total_pages=max(1, (len(serials)+serials_per_sheet-1)//serials_per_sheet)
-    page_no=min(page_no, total_pages)
-    selected=serials[(page_no-1)*serials_per_sheet:page_no*serials_per_sheet]
-    stickers=[]
-    for sr in selected:
-        for copy_no in (1,2):
-            stickers.append({"serial":sr["serial"],"job_no":sr["job_no"] or "UNALLOCATED",
-                             "appliance":sr["appliance"] or "MOTOR", "copy":copy_no,
-                             "allocated":bool(sr["job_id"])})
-    return render_template("sticker_sheet.html", page=stickers, page_no=page_no,
-                           total=len(serials)*2, total_serials=len(serials),
-                           total_pages=total_pages, page_size=65,
-                           serials_per_sheet=serials_per_sheet)
+    stickers=[{"serial":x,"job_no":"UNALLOCATED","appliance":"MOTOR","copy":1,"allocated":False} for x in serials]
+    return render_template("sticker_sheet.html", page=stickers, page_no=batch_no, total=len(stickers), total_serials=len(stickers), total_pages=batch_no, page_size=65, serials_per_sheet=65)
 
 @app.route("/sticker-series/generate", methods=["POST"])
 @login_required
 def generate_sticker_series():
-    """Create the next 32 unused serials, which print as 64 stickers + 1 blank slot."""
-    try:
-        count=max(1, min(500, int(request.form.get("count") or 32)))
-    except ValueError:
-        count=32
+    """Continue the independent 65-label batch sequence."""
     c=db()
-    created=[]
-    for _ in range(count):
-        serial=next_serial(c)
-        c.execute("INSERT INTO serial_registry(serial,job_id,created_at) VALUES(?,?,?)",(serial,None,now()))
-        created.append(serial)
-    c.commit(); c.close()
-    log(f"Generated sticker series ({len(created)} serials)", "serial_registry")
-    flash(f"Generated {len(created)} serials / {len(created)*2} stickers.", "ok")
-    return redirect(url_for("sticker_sheet", page=999999))
+    last=c.execute("SELECT COALESCE(MAX(batch_no),0) n FROM print_batches WHERE print_type=?", ("labels",)).fetchone()["n"]
+    c.close()
+    return redirect(url_for("sticker_sheet", batch=last+1))
 
 @app.route("/api/mobile/allocate", methods=["POST"])
 @login_required
