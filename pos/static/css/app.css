@@ -119,62 +119,60 @@
 }
 .restore-card{max-width:720px}.restore-card input[type=file]{padding:12px;background:#f8fafb}.loginbox .toast{margin:10px 0}
 
-/* FINAL: LARGE, READABLE BARCODE — 38.10 × 21.20 mm */
+/* =========================================
+   FINAL 38.10 × 21.20 MM BARCODE LABEL
+   ========================================= */
 
 .sheet65 {
     width: 190.5mm !important;
     height: 275.6mm !important;
+
     grid-template-columns: repeat(5, 38.1mm) !important;
     grid-template-rows: repeat(13, 21.2mm) !important;
+
     gap: 0 !important;
+    overflow: hidden !important;
 }
 
 .small-sticker {
     width: 38.1mm !important;
     height: 21.2mm !important;
-    padding: 0.5mm !important;
-    overflow: hidden !important;
+
+    box-sizing: border-box !important;
+    padding: 0.4mm !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+
     gap: 0 !important;
+    overflow: hidden !important;
 }
 
-/* Maximum barcode size with safe margins */
-.small-sticker .barcode-img,
-.small-sticker .barcode {
+/* Large barcode */
+.small-sticker .barcode-img {
     display: block !important;
+
     width: 37mm !important;
-    max-width: 37mm !important;
-    height: 15.5mm !important;
-    max-height: 15.5mm !important;
-    margin: 0 auto !important;
+    max-width: none !important;
+
+    height: 14.5mm !important;
+    max-height: 14.5mm !important;
+
     object-fit: fill !important;
+
+    transform: scaleX(1.18) !important;
+    transform-origin: center center !important;
+
+    margin: 0 auto !important;
 }
 
-/* Serial number below barcode */
+/* Small serial number */
 .small-sticker strong {
-    font-size: 5.5px !important;
+    font-size: 4.5px !important;
     line-height: 1 !important;
-    margin-top: 0.5mm !important;
+    margin-top: 0.4mm !important;
     white-space: nowrap !important;
-}
-
-@media print {
-    @page {
-        size: A4 portrait;
-        margin: 0;
-    }
-
-    .sticker-sheet-document {
-        width: 210mm !important;
-        height: 297mm !important;
-        padding: 10.7mm 9.75mm !important;
-        margin: 0 !important;
-    }
-
-    .sheet65 {
-        page-break-after: always;
-    }
-
-    .sheet65:last-child {
-        page-break-after: auto;
-    }
 }
