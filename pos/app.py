@@ -212,6 +212,67 @@ def deleted_jobs():
         except Exception: item["payment_count"]=0
         rows.append(item)
     return render_template("deleted_jobs.html", rows=rows)
+    # =========================================
+# PUBLIC CUSTOMER TRACKING
+# =========================================
+
+@app.route("/track", methods=["GET"])
+def customer_tracking():
+    return render_template("customer_tracking.html")
+
+
+@app.route("/api/customer-track", methods=["GET"])
+def customer_track_api():
+    value = (request.args.get("q") or "").strip()
+
+    if not value:
+        return jsonify({
+            "found": False,
+            "error": "Enter or scan a serial number"
+        }), 400
+
+    c = db()
+
+    job = c.execute("""
+        SELECT
+            j.job_no,
+            j.serial,
+            j.appliance,
+            j.brand,
+            j.model,
+            j.status,
+            j.received_at,
+            j.delivered_at,
+            c.name AS customer
+        FROM jobs j
+        LEFT JOIN customers c
+            ON c.id = j.customer_id
+        WHERE
+            j.serial = ?
+            OR j.job_no = ?
+        ORDER BY j.id DESC
+        LIMIT 1
+    """, (value, value)).fetchone()
+
+    c.close()
+
+    if not job:
+        return jsonify({
+            "found": False,
+            "error": "No repair job found"
+        }), 404
+
+    return jsonify({
+        "found": True,
+        "job_no": job["job_no"],
+        "serial": job["serial"],
+        "appliance": job["appliance"],
+        "brand": job["brand"],
+        "model": job["model"],
+        "status": job["status"],
+        "received_at": job["received_at"],
+        "delivered_at": job["delivered_at"]
+    })
 
 @app.route("/customers",methods=["GET","POST"])
 @login_required
