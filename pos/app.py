@@ -421,12 +421,18 @@ def stickers(jid):
 def blank_job_cards():
     return render_template("blank_job_cards.html", card_count=6)
 
-@app.route("/barcode/<path:value>.svg")
+@app.route("//<path:value>.svg")
 @login_required
-def barcode_svg(value):
+def _svg(value):
     value=(value or "").strip()[:80]
     if not value: return "", 400
-    drawing=createBarcodeDrawing("Code128", value=value, barHeight=24, barWidth=0.55, humanReadable=False)
+    drawing=createBarcodeDrawing(
+    "Code128",
+    value=serial,
+    barWidth=0.5 * mm,
+    barHeight=15 * mm,
+    humanReadable=True
+)
     drawing.width=max(drawing.width, 110)
     return renderSVG.drawToString(drawing), 200, {"Content-Type":"image/svg+xml; charset=utf-8","Cache-Control":"no-store"}
 
