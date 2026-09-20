@@ -14,7 +14,7 @@
 <div class="sticker-sheet-document"><div class="sheet65">
 {% for item in page %}
 <div class="small-sticker">
-  <img class="barcode-img" src="{{url_for('_svg', value=item.serial))}}" alt="Barcode {{item.serial}}">
+  <img class="barcode-img" src="{{url_for('_svg', value=item.serial)}}" alt="Barcode {{item.serial}}">
   <strong>{{item.serial}}</strong>
 </div>
 {% endfor %}
