@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
-import sqlite3, os, csv, io, shutil, re
+import sqlite3, os, csv, io, shutil, re, json
 try:
     import cv2
     import numpy as np
@@ -58,16 +58,31 @@ def init_db():
     CREATE TABLE IF NOT EXISTS suppliers(id INTEGER PRIMARY KEY,name TEXT,phone TEXT,address TEXT,gst TEXT);
     CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY,username TEXT,action TEXT,entity TEXT,entity_id INTEGER,created_at TEXT);
     CREATE TABLE IF NOT EXISTS scan_events(id INTEGER PRIMARY KEY,job_id INTEGER,serial TEXT,scan_type TEXT DEFAULT 'allocation',scanned_by TEXT,scanned_at TEXT,scanned_date TEXT,device TEXT, FOREIGN KEY(job_id) REFERENCES jobs(id) ON DELETE CASCADE);
+    CREATE TABLE IF NOT EXISTS deleted_jobs(
+      id INTEGER PRIMARY KEY, original_job_id INTEGER, job_no TEXT, serial TEXT,
+      customer_name TEXT, phone TEXT, address TEXT, email TEXT, appliance TEXT, brand TEXT, model TEXT,
+      complaint TEXT, accessories TEXT, condition TEXT, technician TEXT, status TEXT, discount REAL DEFAULT 0,
+      received_at TEXT, delivered_at TEXT, deleted_at TEXT, deleted_by TEXT,
+      subtotal REAL DEFAULT 0, total REAL DEFAULT 0, paid REAL DEFAULT 0, balance REAL DEFAULT 0,
+      items_json TEXT, payments_json TEXT
+    );
     CREATE TABLE IF NOT EXISTS serial_registry(id INTEGER PRIMARY KEY,serial TEXT UNIQUE NOT NULL,job_id INTEGER UNIQUE,created_at TEXT, FOREIGN KEY(job_id) REFERENCES jobs(id) ON DELETE SET NULL);
     """)
     if not c.execute("SELECT 1 FROM users LIMIT 1").fetchone():
         c.execute("INSERT INTO users(username,password,role) VALUES(?,?,?)",("admin",generate_password_hash("admin"),"admin"))
     # Lightweight schema upgrades for existing databases
+    user_cols={r[1] for r in c.execute("PRAGMA table_info(users)").fetchall()}
+    if "must_change_password" not in user_cols:
+        c.execute("ALTER TABLE users ADD COLUMN must_change_password INTEGER NOT NULL DEFAULT 1")
     cols={r[1] for r in c.execute("PRAGMA table_info(jobs)").fetchall()}
     if "serial_status" not in cols: c.execute("ALTER TABLE jobs ADD COLUMN serial_status TEXT DEFAULT 'Active'")
     if "serial_created_at" not in cols: c.execute("ALTER TABLE jobs ADD COLUMN serial_created_at TEXT")
     if "last_scanned_at" not in cols: c.execute("ALTER TABLE jobs ADD COLUMN last_scanned_at TEXT")
     if "scan_count" not in cols: c.execute("ALTER TABLE jobs ADD COLUMN scan_count INTEGER DEFAULT 0")
+    # Keep new and legacy records aligned where the serial can safely become the job number.
+    c.execute("""UPDATE jobs SET job_no=serial
+                 WHERE serial IS NOT NULL AND TRIM(serial)!=''
+                 AND NOT EXISTS (SELECT 1 FROM jobs other WHERE other.job_no=jobs.serial AND other.id!=jobs.id)""")
     c.commit(); c.close()
 
 def now(): return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -78,6 +93,8 @@ def login_required(f):
     @wraps(f)
     def w(*a,**k):
         if "uid" not in session: return redirect(url_for("login",next=request.path))
+        if session.get("must_change_password") and request.endpoint not in {"change_password", "logout"}:
+            return redirect(url_for("change_password"))
         return f(*a,**k)
     return w
 
@@ -90,10 +107,37 @@ def login():
     if request.method=="POST":
         c=db(); u=c.execute("SELECT * FROM users WHERE username=?",(request.form["username"],)).fetchone(); c.close()
         if u and check_password_hash(u["password"],request.form["password"]):
-            session.update(uid=u["id"],user=u["username"],role=u["role"])
+            must_change=bool(u["must_change_password"]) if "must_change_password" in u.keys() else True
+            session.update(uid=u["id"],user=u["username"],role=u["role"],must_change_password=must_change)
+            if must_change:
+                return redirect(url_for("change_password"))
             return redirect(request.args.get("next") or url_for("dashboard"))
         flash("Invalid username or password","error")
     return render_template("login.html")
+
+@app.route("/change-password",methods=["GET","POST"])
+def change_password():
+    if "uid" not in session:
+        return redirect(url_for("login"))
+    if request.method=="POST":
+        current=request.form.get("current_password","")
+        new_password=request.form.get("new_password","")
+        confirm=request.form.get("confirm_password","")
+        if len(new_password)<8:
+            flash("New password must be at least 8 characters.","error")
+        elif new_password!=confirm:
+            flash("New passwords do not match.","error")
+        else:
+            c=db(); u=c.execute("SELECT password FROM users WHERE id=?",(session["uid"],)).fetchone()
+            if not u or not check_password_hash(u["password"],current):
+                c.close(); flash("Current password is incorrect.","error")
+            else:
+                c.execute("UPDATE users SET password=?, must_change_password=0 WHERE id=?",(generate_password_hash(new_password),session["uid"]))
+                c.commit(); c.close()
+                session["must_change_password"]=False
+                flash("Password changed successfully.","ok")
+                return redirect(url_for("dashboard"))
+    return render_template("change_password.html")
 
 @app.route("/logout")
 def logout():
@@ -146,13 +190,28 @@ def dashboard():
       "open":c.execute("SELECT COUNT(*) n FROM jobs WHERE status NOT IN ('Delivered','Cancelled')").fetchone()["n"],
       "ready":c.execute("SELECT COUNT(*) n FROM jobs WHERE status='Ready'").fetchone()["n"],
       "delivered":c.execute("SELECT COUNT(*) n FROM jobs WHERE status='Delivered'").fetchone()["n"],
+      "deleted":c.execute("SELECT COUNT(*) n FROM deleted_jobs").fetchone()["n"],
       "low":c.execute("SELECT COUNT(*) n FROM inventory WHERE stock<=min_stock").fetchone()["n"],
       "sales":c.execute("SELECT COALESCE(SUM(amount),0) n FROM payments WHERE date(paid_at)=date('now')").fetchone()["n"]
     }
     stats["pending"] = total_pending_amount(c)
     jobs=c.execute("""SELECT j.*,c.name customer FROM jobs j LEFT JOIN customers c ON c.id=j.customer_id
-                      ORDER BY j.id DESC LIMIT 8""").fetchall()
+                      ORDER BY j.id DESC LIMIT 30""").fetchall()
     c.close(); return render_template("dashboard.html",stats=stats,jobs=jobs)
+
+@app.route("/deleted-jobs")
+@login_required
+def deleted_jobs():
+    c=db(); raw=c.execute("SELECT * FROM deleted_jobs ORDER BY id DESC").fetchall(); c.close()
+    rows=[]
+    for row in raw:
+        item=dict(row)
+        try: item["item_count"]=len(json.loads(item.get("items_json") or "[]"))
+        except Exception: item["item_count"]=0
+        try: item["payment_count"]=len(json.loads(item.get("payments_json") or "[]"))
+        except Exception: item["payment_count"]=0
+        rows.append(item)
+    return render_template("deleted_jobs.html", rows=rows)
 
 @app.route("/customers",methods=["GET","POST"])
 @login_required
@@ -187,14 +246,12 @@ def new_job():
             c.execute("INSERT INTO customers(name,phone,address,created_at) VALUES(?,?,?,?)",
                       (request.form.get("customer_name") or "Walk-in / Pending",request.form.get("phone"),request.form.get("address"),now()))
             customer_id=c.execute("SELECT last_insert_rowid()").fetchone()[0]
-        year=datetime.now().year
-        n=c.execute("SELECT COUNT(*)+1 n FROM jobs").fetchone()["n"]
-        job_no=f"PE-{year}-{n:05d}"
+        serial=(request.form.get("serial") or next_serial(c)).strip()
+        job_no=serial
         c.execute("""INSERT INTO jobs(job_no,customer_id,appliance,brand,model,serial,complaint,technician,status,discount,received_at)
           VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
           (job_no,customer_id,request.form.get("appliance"),request.form.get("brand"),request.form.get("model"),
-           (request.form.get("serial") or next_serial(c)).strip(),request.form.get("complaint"),
-           request.form.get("technician"),"Received",0,now()))
+           serial,request.form.get("complaint"),request.form.get("technician"),"Received",0,now()))
         jid=c.execute("SELECT last_insert_rowid()").fetchone()[0]
         serial=c.execute("SELECT serial FROM jobs WHERE id=?",(jid,)).fetchone()["serial"]
         c.execute("INSERT OR IGNORE INTO serial_registry(serial,job_id,created_at) VALUES(?,?,?)",(serial,jid,now()))
@@ -225,11 +282,25 @@ def job(jid):
 @app.route("/jobs/<int:jid>/delete", methods=["POST"])
 @login_required
 def delete_job(jid):
-    c=db(); j=c.execute("SELECT job_no,serial FROM jobs WHERE id=?",(jid,)).fetchone()
+    c=db()
+    j=c.execute("""SELECT j.*, c.name customer_name, c.phone, c.address, c.email
+                  FROM jobs j LEFT JOIN customers c ON c.id=j.customer_id WHERE j.id=?""",(jid,)).fetchone()
     if not j: c.close(); return "Not found",404
-    c.execute("DELETE FROM jobs WHERE id=?",(jid,))
+    items=[dict(x) for x in c.execute("SELECT * FROM items WHERE job_id=? ORDER BY id",(jid,)).fetchall()]
+    payments=[dict(x) for x in c.execute("SELECT * FROM payments WHERE job_id=? ORDER BY id",(jid,)).fetchall()]
+    subtotal,total,paid,balance=job_totals(c,jid,j["discount"])
+    c.execute("""INSERT INTO deleted_jobs(
+      original_job_id,job_no,serial,customer_name,phone,address,email,appliance,brand,model,complaint,
+      accessories,condition,technician,status,discount,received_at,delivered_at,deleted_at,deleted_by,
+      subtotal,total,paid,balance,items_json,payments_json
+    ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",(
+      j["id"],j["job_no"],j["serial"],j["customer_name"],j["phone"],j["address"],j["email"],
+      j["appliance"],j["brand"],j["model"],j["complaint"],j["accessories"],j["condition"],
+      j["technician"],j["status"],j["discount"],j["received_at"],j["delivered_at"],now(),
+      session.get("user","system"),subtotal,total,paid,balance,json.dumps(items),json.dumps(payments)))
     c.execute("UPDATE serial_registry SET job_id=NULL WHERE job_id=?",(jid,))
-    c.commit(); c.close(); log("Deleted job","job",jid); flash("Job card deleted","ok")
+    c.execute("DELETE FROM jobs WHERE id=?",(jid,))
+    c.commit(); c.close(); log("Deleted job","job",jid); flash("Job card archived and deleted","ok")
     return redirect(url_for("dashboard"))
 
 @app.route("/jobs/<int:jid>/revoke", methods=["POST"])
@@ -421,19 +492,12 @@ def stickers(jid):
 def blank_job_cards():
     return render_template("blank_job_cards.html", card_count=6)
 
-@app.route("//<path:value>.svg")
+@app.route("/barcode/<path:value>.svg")
 @login_required
-def _svg(value):
+def barcode_svg(value):
     value=(value or "").strip()[:80]
     if not value: return "", 400
-    drawing=createBarcodeDrawing(
-    "Code128",
-    value=serial,
-    barWidth=0.5 * mm,
-    barHeight=15 * mm,
-    humanReadable=True
-)
-    drawing.width=max(drawing.width, 110)
+    drawing=createBarcodeDrawing("Code128", value=value, barHeight=27, barWidth=0.57, humanReadable=False)
     return renderSVG.drawToString(drawing), 200, {"Content-Type":"image/svg+xml; charset=utf-8","Cache-Control":"no-store"}
 
 @app.route("/qr/<path:value>.png")
@@ -512,8 +576,7 @@ def mobile_allocate():
     phone=(data.get("phone") or "").strip()
     c.execute("INSERT INTO customers(name,phone,created_at) VALUES(?,?,?)",(customer_name,phone,now()))
     customer_id=c.execute("SELECT last_insert_rowid()").fetchone()[0]
-    job_count=c.execute("SELECT COUNT(*) n FROM jobs").fetchone()["n"]+1
-    job_no=f"PE-{datetime.now().year}-{job_count:05d}"
+    job_no=serial
     c.execute("""INSERT INTO jobs(job_no,customer_id,appliance,brand,serial,complaint,technician,status,received_at)
                  VALUES(?,?,?,?,?,?,?,?,?)""",
               (job_no,customer_id,data.get("appliance") or "Motor",data.get("brand") or "",
@@ -534,6 +597,54 @@ def backup():
     os.makedirs(os.path.join(BASE,"backups"),exist_ok=True)
     dest=os.path.join(BASE,"backups",f"patel_pos_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db")
     shutil.copy2(DB,dest); return send_file(dest,as_attachment=True,download_name=os.path.basename(dest))
+
+@app.route("/restore", methods=["GET", "POST"])
+@login_required
+def restore():
+    if session.get("role") != "admin":
+        flash("Only an administrator can restore a backup.", "error")
+        return redirect(url_for("dashboard"))
+    if request.method == "POST":
+        upload=request.files.get("backup_file")
+        if not upload or not upload.filename:
+            flash("Please choose a SQLite backup file.", "error")
+            return redirect(url_for("restore"))
+        os.makedirs(os.path.join(BASE,"backups"),exist_ok=True)
+        temp=os.path.join(os.path.join(BASE,"backups"), "_restore_upload.db")
+        upload.save(temp)
+        valid=False
+        check=None
+        try:
+            check=sqlite3.connect(temp)
+            result=check.execute("PRAGMA integrity_check").fetchone()[0]
+            tables={r[0] for r in check.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
+            required={"users","customers","jobs","items","payments"}
+            valid=(result=="ok" and required.issubset(tables))
+        except sqlite3.DatabaseError:
+            valid=False
+        finally:
+            if check: check.close()
+        if not valid:
+            try: os.remove(temp)
+            except OSError: pass
+            flash("Restore failed: invalid or incompatible SQLite backup.", "error")
+            return redirect(url_for("restore"))
+        current=os.path.join(BASE,"backups",f"before_restore_{datetime.now().strftime('%Y%m%d_%H%M%S')}.db")
+        try:
+            shutil.copy2(DB,current)
+            os.replace(temp,DB)
+            init_db()
+            log("Restored database backup", "database")
+            flash("Backup restored successfully. Please verify your records.", "ok")
+            return redirect(url_for("dashboard"))
+        except Exception as exc:
+            try:
+                if os.path.exists(current): shutil.copy2(current,DB)
+            except Exception:
+                pass
+            flash(f"Restore failed: {exc}", "error")
+            return redirect(url_for("restore"))
+    return render_template("restore.html")
 
 @app.route("/export/customers.csv")
 @login_required
