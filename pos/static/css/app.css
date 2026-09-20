@@ -150,73 +150,57 @@
     overflow: hidden !important;
 }
 
-/* ===== EXACT 65-LABEL A4 LAYOUT ===== */
-
+/* ===== FINAL LABEL + BARCODE + TEXT OVERRIDE ===== */
 @media print {
-    @page {
-        size: A4;
-        margin: 0;
-    }
-
-    .sticker-sheet-document {
-        width: 210mm !important;
-        height: 297mm !important;
-        margin: 0 !important;
-        padding: 10.7mm 4.75mm !important;
-        box-sizing: border-box !important;
-    }
-
-    .sheet65 {
-        width: 200.5mm !important;
-        height: 275.6mm !important;
-
-        display: grid !important;
-        grid-template-columns: repeat(5, 38.1mm) !important;
-        grid-template-rows: repeat(13, 21.2mm) !important;
-
-        column-gap: 2.5mm !important;
-        row-gap: 0 !important;
-
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-    }
 
     .small-sticker {
-        box-sizing: border-box !important;
         width: 38.1mm !important;
         height: 21.2mm !important;
+        box-sizing: border-box !important;
+        padding: 0.5mm !important;
 
-        padding: 0.8mm !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 0.3mm !important;
+        gap: 0.2mm !important;
         overflow: hidden !important;
     }
 
-    /* Longer, centred barcode */
-    .small-sticker .barcode,
+    /* Barcode: 0.5 mm margin each side */
     .small-sticker .barcode-img {
         display: block !important;
-        width: 36.5mm !important;
-        max-width: 36.5mm !important;
-        height: 10.5mm !important;
-
+        width: 37.1mm !important;
+        max-width: 37.1mm !important;
+        height: 11.5mm !important;
         margin: 0 auto !important;
+        padding: 0 !important;
         object-fit: fill !important;
         object-position: center !important;
     }
 
-    /* Reduce excessive space between barcode and text */
+    .small-sticker .barcode {
+        width: 37.1mm !important;
+        max-width: 37.1mm !important;
+        margin: 0 auto !important;
+    }
+
+    /* Text: 0.6 mm margin each side */
     .small-sticker .serial,
     .small-sticker .barcode-text,
     .small-sticker .item-text {
-        margin: 0 !important;
+        width: 36.9mm !important;
+        max-width: 36.9mm !important;
+        margin: 0 auto !important;
         padding: 0 !important;
+
+        text-align: center !important;
         line-height: 1 !important;
         font-size: 5.5pt !important;
-        text-align: center !important;
+        box-sizing: border-box !important;
+
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: clip !important;
     }
 }
