@@ -150,12 +150,19 @@
     overflow: hidden !important;
 }
 
-/* ===== MERGED LABEL + BARCODE + TEXT OVERRIDE ===== */
+/* =========================================
+   FINAL PATEL ELECTRICALS LABEL OVERRIDE
+   Label: 38.1 × 21.2 mm
+   Barcode: Enlarged + Centered
+   Serial: PE-000XXX (Larger)
+   ========================================= */
+
 @media print {
 
     .small-sticker {
         width: 38.1mm !important;
         height: 21.2mm !important;
+
         box-sizing: border-box !important;
         padding: 0.4mm !important;
         margin: 0 !important;
@@ -164,11 +171,15 @@
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
+
         gap: 0 !important;
         overflow: hidden !important;
     }
 
-    /* Barcode: Code 2 dimensions */
+    /* =========================================
+       BARCODE — LARGE + VISUALLY CENTERED
+       ========================================= */
+
     .small-sticker .barcode-img {
         display: block !important;
 
@@ -178,11 +189,13 @@
         height: 14.5mm !important;
         max-height: 14.5mm !important;
 
-        margin: 0 auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+
         padding: 0 !important;
 
         object-fit: fill !important;
-        object-position: center !important;
+        object-position: center center !important;
 
         transform: scaleX(1.18) !important;
         transform-origin: center center !important;
@@ -191,13 +204,21 @@
     .small-sticker .barcode {
         width: 37mm !important;
         max-width: none !important;
-        margin: 0 auto !important;
+
+        margin-left: auto !important;
+        margin-right: auto !important;
+
+        text-align: center !important;
     }
 
-    /* Text: 0.6 mm margin each side */
+    /* =========================================
+       TEXT — 0.6 MM MARGIN
+       ========================================= */
+
     .small-sticker .serial,
     .small-sticker .barcode-text,
     .small-sticker .item-text {
+
         width: 36.9mm !important;
         max-width: 36.9mm !important;
 
@@ -206,7 +227,8 @@
 
         text-align: center !important;
         line-height: 1 !important;
-        font-size: 5.5pt !important;
+
+        font-size: 6.2pt !important;
         box-sizing: border-box !important;
 
         white-space: nowrap !important;
@@ -214,11 +236,22 @@
         text-overflow: clip !important;
     }
 
-    /* Strong serial text */
+    /* =========================================
+       SERIAL NUMBER — PE-000XXX LARGER
+       ========================================= */
+
+    .small-sticker .serial,
     .small-sticker strong {
-        font-size: 4.5px !important;
+
+        font-size: 8pt !important;
+        font-weight: bold !important;
+
         line-height: 1 !important;
+        text-align: center !important;
+
         margin-top: 0.4mm !important;
+
         white-space: nowrap !important;
     }
+
 }
