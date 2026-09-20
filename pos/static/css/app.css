@@ -255,3 +255,39 @@
     }
 
 }
+
+/* =========================================
+   SINGLE JOB CARD BARCODE + TRACKING QR
+   ========================================= */
+.job-card-codes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 10px 0;
+  border-top: 1px solid #d9e0e8;
+  border-bottom: 1px solid #d9e0e8;
+  page-break-inside: avoid;
+}
+.code-block { flex: 1; min-width: 0; }
+.serial-large { font-size: 18px; font-weight: 800; letter-spacing: .5px; margin: 4px 0; }
+.job-barcode { display: block; width: 100%; max-width: 310px; height: 48px; object-fit: contain; object-position: left center; }
+.qr-block { width: 94px; flex: 0 0 94px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 9px; }
+.job-qr { width: 78px; height: 78px; object-fit: contain; }
+.qr-block small { font-size: 8px; color: #475569; }
+@media print {
+  .job-card-codes { break-inside: avoid; }
+}
+
+/* Six-up blank job cards: one serial barcode + tracking QR per card */
+.six-up .preprinted-code-box{display:grid;grid-template-columns:minmax(0,1fr) 18mm;align-items:center;gap:2mm;border:.25mm solid #8b969d;border-radius:1mm;padding:1.5mm;margin:1.5mm 0;background:#fff}
+.six-up .code-column{text-align:center;min-width:0}
+.six-up .code-caption{font-size:5px;font-weight:900;letter-spacing:.25px;color:#4f5d66;margin-bottom:.7mm}
+.six-up .job-card-barcode{display:block;width:100%;height:10mm;object-fit:fill}
+.six-up .code-serial{display:block;font-size:7px!important;letter-spacing:.5px;color:#17202a;margin-top:.4mm}
+.six-up .code-note{font-size:4.3px;line-height:1.15;color:#69757e;margin-top:.5mm}
+.six-up .qr-column{text-align:center;border-left:.2mm solid #c5cdd2;padding-left:1.5mm}
+.six-up .job-card-qr{display:block;width:15mm;height:15mm;object-fit:contain;margin:0 auto}
+.six-up .qr-caption{font-size:4.5px;font-weight:900;letter-spacing:.25px;margin-top:.5mm;color:#4f5d66}
+@media print{.six-up .preprinted-code-box{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
