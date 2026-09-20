@@ -294,18 +294,28 @@
 
 
 /* =========================================
-   SIX-UP BARCODE OVERRIDE — SCALE 1.8X
+   SIX-UP BARCODE — 1.8X HORIZONTAL
+   CENTERED WITHIN COLUMN
    ========================================= */
+
+.six-up .code-column {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    overflow: hidden !important;
+}
 
 .six-up .job-card-barcode {
     display: block !important;
-    width: 100% !important;
+    width: 55.56% !important;
+    max-width: none !important;
     height: 10mm !important;
+
     object-fit: fill !important;
+    object-position: center center !important;
 
     transform: scaleX(1.8) !important;
     transform-origin: center center !important;
 
-    margin-left: auto !important;
-    margin-right: auto !important;
+    margin: 0 auto !important;
 }
