@@ -1,0 +1,97 @@
+
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#17202a}a{text-decoration:none;color:inherit}.shell{display:flex;min-height:100vh}.side{width:230px;background:#101820;color:#fff;padding:24px 16px;display:flex;flex-direction:column}.brand{font-weight:900;font-size:23px;letter-spacing:-1px;margin:4px 8px 28px}.brand span{opacity:.55}.brand small{display:block;font-size:9px;letter-spacing:2px;font-weight:700;opacity:.55;margin-top:4px}.side nav{display:grid;gap:5px}.side nav a,.sidebottom a{padding:12px 13px;border-radius:10px;color:#cbd4dc;font-size:14px}.side nav a:hover,.sidebottom a:hover{background:#1c2933;color:#fff}.sidebottom{margin-top:auto;display:grid;gap:4px}.main{flex:1;padding:28px 34px;max-width:1500px}header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:25px}.eyebrow{font-size:10px;font-weight:800;letter-spacing:2px;color:#7b8794}h1{font-size:30px;margin:4px 0 0;letter-spacing:-1px}h2{margin:8px 0;font-size:22px}.user{font-size:12px;color:#7b8794}.grid4,.grid3{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.grid3{grid-template-columns:repeat(3,1fr)}.stat,.card{background:#fff;border:1px solid #e5e9ed;border-radius:15px;box-shadow:0 4px 16px #17202a08}.stat{padding:18px}.stat small{display:block;color:#7b8794;font-weight:700;font-size:12px}.stat b{display:block;font-size:25px;margin-top:7px}.actions{display:flex;gap:9px;margin:14px 0 20px}.btn,button{border:1px solid #d7dde2;background:#fff;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer;font-size:13px}.btn.primary,button.primary,button{background:#16232d;color:#fff;border-color:#16232d}.card{padding:18px;margin-bottom:18px}.cardhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.cardhead h3{margin:0;font-size:16px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:#7b8794;font-size:11px;text-transform:uppercase;letter-spacing:.6px}th,td{padding:11px 9px;border-bottom:1px solid #edf0f2}tr:last-child td{border-bottom:0}.pill{display:inline-block;padding:5px 8px;border-radius:999px;background:#edf2f5;font-size:11px;font-weight:800}.link{font-weight:800}.empty{text-align:center;color:#89939d;padding:25px}.twocol,.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.formgrid{grid-template-columns:1fr 1fr}.form{display:grid;gap:11px}.formgrid .card:nth-child(3){grid-column:1/-1}.formgrid .card:nth-child(3) textarea{min-height:90px}input,select,textarea{width:100%;border:1px solid #d9dfe4;border-radius:9px;padding:10px 11px;background:#fff;font:inherit;font-size:13px}textarea{min-height:76px;resize:vertical}label{font-size:11px;font-weight:800;color:#65717c;display:grid;gap:6px}.inlineform{display:grid;grid-template-columns:2fr 1fr .7fr 1fr 1fr auto;gap:7px;margin-bottom:12px}.jobtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.muted{color:#7b8794;font-size:13px}.toast{padding:11px 14px;border-radius:9px;background:#eaf5ee;margin-bottom:15px;font-size:13px}.toast.error{background:#fff0f0}.totals{display:grid;gap:8px;font-size:13px}.totals span{display:flex;justify-content:space-between}.totals .grand{font-size:17px;padding-top:10px;border-top:1px solid #ddd}.icon{padding:3px 8px;background:#fff;color:#555;border-color:#ddd}.warnrow{background:#fff9ed}.loginbg{min-height:100vh;display:grid;place-items:center;background:#101820}.loginbox{width:min(390px,92vw);background:#fff;padding:32px;border-radius:18px;box-shadow:0 20px 60px #0005}.loginbox h2{margin-top:25px}.loginbox input{margin:6px 0}.loginbox button{width:100%;margin-top:10px;padding:12px}.big{font-size:30px}.hint{font-size:11px;color:#7b8794;margin-top:18px}.phead{display:flex;justify-content:space-between;gap:15px;border-bottom:2px solid #17202a;padding-bottom:9px}.pbrand{font-size:23px;font-weight:950;letter-spacing:-.8px}.psub{font-size:10px;font-weight:800;letter-spacing:.8px}.contact{font-size:8px;color:#5c6770;margin-top:4px}.jobbadge{text-align:right;border:1.5px solid #17202a;border-radius:7px;padding:6px 9px;min-width:92px}.jobbadge small,.jobbadge strong,.jobbadge span{display:block}.jobbadge small{font-size:7px;letter-spacing:1px}.jobbadge strong{font-size:13px}.jobbadge span{font-size:8px;margin-top:2px}.a5{width:148mm;min-height:210mm;margin:0 auto;padding:9mm 8mm;background:#fff;color:#17202a}.printbody{background:#fff;font-family:Arial,sans-serif;font-size:9px}.prow{border-bottom:1px solid #ccd2d6;padding:7px 0}.prow.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.prow.four{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:8px}.prow div{display:grid;gap:2px}.prow b,.box>b{font-size:7px;letter-spacing:.7px;color:#69757e}.prow strong{font-size:10px}.prow span{font-size:8px}.box{padding:6px 0;border-bottom:1px solid #ccd2d6}.box p{margin:3px 0;line-height:1.25}.mini{display:flex;gap:15px;padding:5px 0;border-bottom:1px solid #ccd2d6;font-size:8px}.ptable{margin-top:6px;font-size:8px}.ptable th{font-size:7px;background:#f0f2f3;color:#28343d;padding:5px}.ptable td{padding:4px 5px}.bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:7px}.ack{font-size:7.5px;line-height:1.3}.ack p{margin:3px 0}.sign{border-top:1px solid #777;margin-top:20px;padding-top:3px;width:75%;font-size:7px}.money{font-size:8px}.money div{display:flex;justify-content:space-between;padding:2px 0}.money .total{border-top:1px solid #17202a;border-bottom:1px solid #17202a;font-weight:900;font-size:11px;padding:4px 0}.money .balance{font-weight:900;font-size:10px}.terms{border-top:1px solid #ccd2d6;margin-top:6px;padding-top:5px;font-size:7px;line-height:1.25}.pfoot{text-align:center;border-top:1px solid #ccd2d6;margin-top:5px;padding-top:4px;font-size:6.5px;color:#6e7880}
+@media(max-width:900px){.side{width:70px}.side .brand small,.side nav a{font-size:0}.side nav a:first-letter{font-size:18px}.main{padding:20px}.grid4,.grid3,.twocol,.formgrid{grid-template-columns:1fr}.formgrid .card:nth-child(3){grid-column:auto}.inlineform{grid-template-columns:1fr 1fr}.jobtop{gap:10px}.a5{margin:0}}
+@media print{@page{size:A5 portrait;margin:0}.printbody{margin:0}.a5{margin:0;width:148mm;min-height:210mm;box-shadow:none}.no-print{display:none!important}}
+/* Appended print styles — existing design remains unchanged */
+.printbody{background:#fff!important;color:#111}.sticker-page{display:grid;grid-template-columns:1fr 1fr;gap:10mm;padding:10mm}.sticker{border:1px dashed #333;padding:5mm;text-align:center;display:flex;flex-direction:column;gap:3px}.sticker .barcode{width:100%}.a4-grid{width:190mm;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:5mm}.blank-card{border:1px solid #333;padding:6mm;min-height:125mm;box-sizing:border-box}.blank-row{margin:5mm 0}.sticker-slot{height:25mm;border:1px dashed #777;display:flex;align-items:center;justify-content:center;font-size:10px;margin:4mm 0}.write-line{border-bottom:1px solid #999;padding:5mm 0;font-size:10px}.blank-sign{margin-top:10mm;font-size:10px}.sheet65{width:190mm;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:27mm;gap:0}.small-sticker{border:1px dotted #999;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:7px;text-align:center}.small-sticker .barcode{max-width:32mm;width:100%}.small-sticker strong{font-size:8px}@media print{.side,.main>header,.toast{display:none!important}.main{margin:0!important;padding:0!important}.printbody{margin:0!important}.a4-grid{page-break-inside:avoid}}
+
+/* V2.1 print + responsive corrections */
+@media screen and (max-width: 700px){
+  .main{padding:14px!important}.actions{flex-wrap:wrap}.card{padding:12px}.inlineform,.twocol,.formgrid{grid-template-columns:1fr!important}.tablewrap{overflow-x:auto}.phead{flex-direction:column}.a5{width:100%;min-height:auto;padding:18px}.a4-grid,.sheet65{width:100%;margin:0 auto}.blank-card{min-width:0}}
+
+/* A4: exactly four job cards, no clipping */
+.a4-job-page{width:210mm;height:297mm;display:grid;grid-template-columns:105mm 105mm;grid-template-rows:148.5mm 148.5mm;gap:0;margin:0;padding:0;background:#fff;page-break-after:always}
+.a4-job-card{width:105mm;height:148.5mm;border:0.25mm solid #555;padding:6mm;overflow:hidden;position:relative}
+.a4-job-card .pbrand{font-size:15px;letter-spacing:-.3px}.a4-job-card .psub{font-size:8px}.a4-job-card .blank-row{font-size:8px;margin:3mm 0}.a4-job-card .sticker-slot{height:22mm;margin:3mm 0;font-size:8px}.a4-job-card .write-line{padding:3.3mm 0;font-size:8px;white-space:nowrap}.a4-job-card .blank-sign{margin-top:5mm;font-size:8px}
+
+/* Desmat/65-up sticker sheets: 5 columns x 13 rows per A4 page */
+.sticker-sheet-document{width:210mm;margin:0 auto}.sheet65{width:210mm;height:297mm;margin:0;display:grid;grid-template-columns:repeat(5,42mm);grid-template-rows:repeat(13,22.846mm);gap:0;page-break-after:always}.small-sticker{width:42mm;height:22.846mm;padding:1.5mm;overflow:hidden}.small-sticker b{font-size:6px}.small-sticker .barcode{max-width:36mm;height:10mm}.small-sticker strong{font-size:7px}
+@media print{ @page{size:A4 portrait;margin:0} .a4-job-page,.sticker-sheet-document{margin:0!important} .a4-job-page:last-child,.sheet65:last-child{page-break-after:auto} }
+.mobile-panel{max-width:760px}.mobile-panel input,.mobile-panel textarea,.mobile-panel select{width:100%;box-sizing:border-box;margin:.35rem 0 1rem;padding:.75rem}.mobile-panel button{margin:.35rem .35rem .75rem 0}.mobile-panel label{display:block;font-weight:600}.muted{opacity:.7}
+@media(max-width:700px){.shell{display:block}.side{position:static;width:auto}.main{padding:14px}.side nav{display:flex;flex-wrap:wrap;gap:6px}.side nav a{font-size:12px;padding:7px}.user{display:none}.form-grid{display:block}}
+
+/* A4 6-up job card print layout: six cards per sheet, with safe inner padding */
+.a4-job-page.six-up{width:210mm;height:297mm;display:grid;grid-template-columns:repeat(2,105mm);grid-template-rows:repeat(3,99mm);gap:0;margin:0;padding:0;background:#fff;page-break-after:always}
+.six-up .a4-job-card{width:105mm;height:99mm;box-sizing:border-box;border:.25mm solid #555;padding:3.5mm;overflow:hidden;position:relative}
+.six-up .pbrand{font-size:11px;letter-spacing:-.25px;font-weight:700}.six-up .psub{font-size:6.5px}.six-up .blank-row{font-size:6.5px;margin:1.8mm 0}.six-up .sticker-slot{height:13mm;margin:1.8mm 0;font-size:6.5px}.six-up .write-line{padding:1.8mm 0;font-size:6.5px;white-space:nowrap}.six-up .blank-sign{margin-top:2.5mm;font-size:6.5px}
+@media print{ @page{size:A4 portrait;margin:0} .a4-job-page.six-up{margin:0!important;width:210mm!important;height:297mm!important} .six-up .a4-job-card{break-inside:avoid} }
+@media screen and (max-width:700px){.a4-job-page.six-up{transform-origin:top left;transform:scale(.9);margin-bottom:-30mm}.six-up .a4-job-card{max-width:105mm}}
+
+/* Synchronized 65-up sticker sheet controls and reliable print sizing */
+.print-controls{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;padding:12px;font:14px system-ui}
+.print-controls .btn,.print-controls button{border:1px solid #999;padding:7px 12px;border-radius:6px;background:#fff;color:#111;text-decoration:none;cursor:pointer}
+.print-controls .disabled{opacity:.4;pointer-events:none}
+.sheet-meta{text-align:center;padding:4px;font:12px system-ui}
+.sheet65{width:210mm!important;height:297mm!important;display:grid!important;grid-template-columns:repeat(5,42mm)!important;grid-template-rows:repeat(13,22.846mm)!important;gap:0!important;overflow:hidden}
+.small-sticker{box-sizing:border-box!important;width:42mm!important;height:22.846mm!important;padding:1mm!important;overflow:hidden!important;gap:0!important;line-height:1.05!important}
+.small-sticker b{font-size:5.5px!important}.small-sticker small{font-size:5px!important;max-width:39mm;overflow:hidden;white-space:nowrap}
+.small-sticker .barcode{display:block;width:36mm!important;height:8mm!important;max-width:36mm!important}
+.small-sticker strong{font-size:6.5px!important;line-height:1!important}.barcode-fallback{font-size:6px;word-break:break-all}
+@media print{.no-print{display:none!important}.sticker-sheet-document{width:210mm!important;margin:0!important}.sheet65{page-break-after:always}.sheet65:last-child{page-break-after:auto}}
+/* Reliable server-rendered barcode/QR assets: no CDN dependency */
+.small-sticker .barcode-img{display:block;width:36mm;height:8mm;object-fit:contain;max-width:36mm}
+.empty-slot{color:#aaa;font-size:7px}
+@media print{.barcode-img{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+
+/* Professional six-up job card styling — appended without changing the existing POS design */
+.professional-job-card{display:flex;flex-direction:column;gap:0;background:#fff;color:#17202a}
+.professional-job-card .job-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:2mm;border-bottom:.35mm solid #17202a;padding-bottom:1.6mm}
+.professional-job-card .pbrand{font-size:10px!important;font-weight:900!important;letter-spacing:-.25px!important;line-height:1.1}
+.professional-job-card .psub{font-size:5.2px!important;letter-spacing:.7px!important;margin-top:.7mm}
+.professional-job-card .card-label{border:.3mm solid #17202a;border-radius:1mm;padding:1.2mm 1.5mm;font-size:6px;font-weight:900;letter-spacing:.7px;white-space:nowrap}
+.professional-job-card .card-intro{text-align:center;text-transform:uppercase;font-size:5.8px;font-weight:800;letter-spacing:.45px;padding:1.4mm 0 1.1mm;color:#4f5d66}
+.professional-job-card .job-card-meta{display:grid;grid-template-columns:1fr 1fr;gap:2mm;border-top:.2mm solid #bfc6cb;border-bottom:.2mm solid #bfc6cb;padding:1.2mm 0}
+.professional-job-card .job-card-meta div{display:grid;grid-template-columns:auto 1fr;gap:1mm;align-items:end}
+.professional-job-card b{font-size:5.2px!important;letter-spacing:.35px!important;color:#4f5d66}
+.professional-job-card .job-card-meta span{font-size:6px;white-space:nowrap}
+.professional-job-card .professional-slot{height:13mm!important;margin:1.8mm 0!important;border:.3mm dashed #6c7880!important;border-radius:1mm;display:flex;flex-direction:column;gap:.8mm;background:repeating-linear-gradient(135deg,#fff,#fff 2mm,#f5f7f8 2mm,#f5f7f8 4mm)}
+.professional-job-card .slot-title{font-size:6px;font-weight:900;letter-spacing:.35px}
+.professional-job-card .slot-sub{font-size:5px;color:#69757e}
+.professional-job-card .handwriting-section{display:grid;gap:1.25mm}
+.professional-job-card .field-line{display:grid;grid-template-columns:26mm 1fr;gap:1.5mm;align-items:end;min-height:5.1mm;border-bottom:.2mm solid #aeb7bd;padding-bottom:.65mm}
+.professional-job-card .field-line span{display:block;min-height:3.2mm}
+.professional-job-card .job-card-footer{margin-top:auto;padding-top:1.5mm}
+.professional-job-card .collection-note{border:.25mm solid #7b858c;border-radius:1mm;padding:1.2mm 1.4mm;font-size:5.1px;line-height:1.25;text-align:center}
+.professional-job-card .collection-note strong{font-size:5.2px;letter-spacing:.3px}
+.professional-job-card .footer-row{display:flex;justify-content:space-between;gap:2mm;font-size:5.1px;padding-top:1.5mm}
+.professional-job-card .footer-brand{text-align:center;font-size:4.6px;color:#6b767e;padding-top:1mm}
+@media print{.professional-job-card{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+
+/* V2.4 mobile and barcode rendering fix */
+.barcode-img{display:block!important;visibility:visible!important;background:#fff!important}
+@media screen and (max-width:700px){
+  .print-controls{padding:10px 8px!important;gap:8px!important;justify-content:stretch!important}
+  .print-controls form{width:100%!important;display:grid!important;grid-template-columns:1fr auto!important}
+  .print-controls input{width:100%!important;min-width:0!important}
+  .print-controls button,.print-controls .btn{font-size:12px!important;padding:9px 10px!important}
+  .sheet-meta{font-size:11px!important;line-height:1.4!important;padding:8px!important}
+  .sticker-sheet-document{width:100%!important;overflow-x:auto!important}
+  .sheet65{transform-origin:top left;transform:scale(.46);margin-bottom:-160mm!important}
+}
+@media print{.barcode-img{visibility:visible!important}}
+
+/* Dashboard clickable delivery / balance stats */
+.stat-link{display:block;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.stat-link:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.08)}
+.stat-link span{display:block;margin-top:6px;font-size:11px;opacity:.65}
+.compact-stats{margin-top:10px}
+@media(max-width:700px){.stat-link span{font-size:10px}}
+
+.scanner-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.scanner-actions button{margin:0!important}
+
+/* V2.4.1: larger barcode area; shop name removed from 65-up stickers */
+.small-sticker .barcode-img{width:39mm!important;height:10.5mm!important;max-width:39mm!important;object-fit:contain!important}
+.small-sticker strong{font-size:6.2px!important;line-height:1!important}
+
+.report-brand{padding:12px 0 16px;border-bottom:1px solid #e5e9ed;margin-bottom:14px;letter-spacing:.5px}.report-brand b{font-size:18px}.report-brand span{font-size:12px;color:#7b8794}.stat-link span{display:block;font-size:11px;color:#7b8794;margin-top:8px;font-weight:700}
