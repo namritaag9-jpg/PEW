@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}{% block content %}
+<div class="grid4">
+  <div class="stat"><small>Total Jobs</small><b>{{stats.jobs}}</b></div>
+  <a class="stat stat-link" href="{{url_for('repairing_report')}}"><small>Open Repairs</small><b>{{stats.open}}</b><span>View repair jobs →</span></a>
+  <a class="stat stat-link" href="{{url_for('delivered_report')}}"><small>Total Delivered</small><b>{{stats.delivered}}</b><span>View customer details →</span></a>
+  <a class="stat stat-link" href="{{url_for('pending_payments_report')}}"><small>Pending Amount</small><b>₹ {{'%.2f'|format(stats.pending)}}</b><span>View customers &amp; balances →</span></a>
+</div>
+<div class="grid4 compact-stats">
+  <a class="stat stat-link" href="{{url_for('ready_report')}}"><small>Ready for Delivery</small><b>{{stats.ready}}</b><span>View ready jobs →</span></a>
+  <div class="stat"><small>Today's Collections</small><b>₹ {{'%.2f'|format(stats.sales)}}</b></div>
+  <div class="stat"><small>Low Stock</small><b>{{stats.low}}</b></div>
+</div>
+<div class="actions"><a class="btn primary" href="{{url_for('new_job')}}">＋ Create Job Card</a><a class="btn" href="{{url_for('customers')}}">Customers</a><a class="btn" href="{{url_for('inventory')}}">Inventory{% if stats.low %} · {{stats.low}} low{% endif %}</a></div>
+<section class="card"><div class="cardhead"><h3>Recent Job Cards</h3></div><div class="tablewrap"><table><tr><th>Job</th><th>Customer</th><th>Appliance</th><th>Status</th><th>Date</th><th></th></tr>
+{% for j in jobs %}<tr><td><b>{{j.job_no}}</b></td><td>{{j.customer}}</td><td>{{j.appliance or '—'}}</td><td><span class="pill">{{j.status}}</span></td><td>{{j.received_at[:10]}}</td><td><a class="link" href="{{url_for('job',jid=j.id)}}">Open →</a></td></tr>{% else %}<tr><td colspan="6" class="empty">No jobs yet.</td></tr>{% endfor %}</table></div></section>{% endblock %}

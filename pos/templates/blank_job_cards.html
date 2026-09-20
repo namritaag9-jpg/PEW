@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Job Cards - A4 6 Up</title>
+  <link rel="stylesheet" href="{{url_for('static',filename='css/app.css')}}">
+</head>
+<body class="printbody">
+  <div class="a4-job-page six-up">
+    {% for i in range(6) %}
+    <section class="a4-job-card professional-job-card">
+      <div class="job-card-header">
+        <div>
+          <div class="pbrand">PATEL ELECTRICALS WORKSHOP<br><small>Mobile: 7762297283</small></div>
+          <div class="psub">POWER • PRECISION • TRUST</div>
+        </div>
+        <div class="card-label">JOB CARD</div>
+      </div>
+
+      <div class="card-intro">Repair &amp; Service Receiving Slip</div>
+
+      <div class="job-card-meta">
+        <div><b>JOB / SERIAL NO.</b><span>________________</span></div>
+        <div><b>RECEIVED BY</b><span>________________</span></div>
+      </div>
+
+      <div class="sticker-slot professional-slot">
+        <span class="slot-title">PASTE SERIAL STICKER HERE</span>
+        <span class="slot-sub">Attach matching sticker to the motor</span>
+      </div>
+
+      <div class="handwriting-section">
+        <div class="field-line"><b>CUSTOMER NAME</b><span></span></div>
+        <div class="field-line"><b>PHONE</b><span></span></div>
+        <div class="field-line"><b>APPLIANCE / MOTOR</b><span></span></div>
+        <div class="field-line"><b>BRAND / MODEL</b><span></span></div>
+        <div class="field-line"><b>COMPLAINT</b><span></span></div>
+        
+      </div>
+
+      <div class="job-card-footer">
+        <div class="collection-note"><strong>IMPORTANT:</strong> Please bring this job card when collecting your repaired motor/appliance.</div>
+        <div class="footer-row"><span>Customer Sign: __________</span><span>Staff Sign: __________</span></div>
+        <div class="footer-brand">Thank you for choosing Patel Electricals Workshop.</div>
+      </div>
+    </section>
+    {% endfor %}
+  </div>
+  <script>window.onload=()=>setTimeout(()=>window.print(),300)</script>
+</body>
+</html>

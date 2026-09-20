@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title %}New Job Card{% endblock %}{% block content %}
+<form method="post"><div class="formgrid">
+<section class="card"><div class="cardhead"><h3>Customer Details</h3></div>
+<label>Existing customer<select name="customer_id"><option value="">— New customer —</option>{% for c in customers %}<option value="{{c.id}}">{{c.name}} · {{c.phone}}</option>{% endfor %}</select></label>
+<div class="twocol"><input name="customer_name" placeholder="Customer name"><input name="phone" placeholder="Phone"><input name="address" placeholder="Address"></div></section>
+<section class="card"><div class="cardhead"><h3>Appliance Details</h3></div>
+<div class="twocol"><input name="appliance" placeholder="Appliance name (e.g. Motor)" required><input name="brand" placeholder="Brand" required></div>
+<textarea name="complaint" placeholder="Customer complaint" required></textarea>
+<input name="serial" placeholder="Serial / ID (leave blank for automatic serial)">
+</section>
+<section class="card"><div class="cardhead"><h3>Service</h3></div>
+<label>Technician<select name="technician"><option value="Harishankar Patel">Harishankar Patel</option><option value="Others">Others</option></select></label>
+</section></div>
+<div class="actions"><button class="btn primary">Create Job Card</button><a class="btn" href="{{url_for('blank_job_cards')}}">Print Blank A4 Cards</a><a class="btn" href="{{url_for('dashboard')}}">Cancel</a></div></form>{% endblock %}

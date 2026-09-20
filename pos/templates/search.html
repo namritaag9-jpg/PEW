@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block title %}Serial Search{% endblock %}{% block content %}
+<form method="get" class="card"><input name="q" value="{{q}}" placeholder="Scan or enter serial / job number" autofocus><button class="btn primary">Search</button></form>
+<section class="card"><table><tr><th>Serial</th><th>Job</th><th>Customer</th><th>Status</th><th>Open</th></tr>{% for r in rows %}<tr><td>{{r.serial or '—'}}</td><td>{{r.job_no}}</td><td>{{r.customer or '—'}}</td><td>{{r.status}}</td><td><a class="btn" href="{{url_for('job',jid=r.id)}}">Open</a></td></tr>{% else %}<tr><td colspan="5">No matching records</td></tr>{% endfor %}</table></section>{% endblock %}

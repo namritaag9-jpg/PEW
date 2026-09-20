@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Serial Barcode Sticker Sheet</title>
+<link rel="stylesheet" href="{{url_for('static',filename='css/app.css')}}">
+</head><body class="printbody">
+<div class="print-controls no-print">
+  <form method="post" action="{{ url_for('generate_sticker_series') }}" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><input name="count" type="number" min="1" max="500" value="32" style="width:85px"><button type="submit">Generate Next Series</button></form>
+  <a href="{{ url_for('sticker_sheet', page=page_no-1) if page_no > 1 else '#' }}" class="btn {% if page_no <= 1 %}disabled{% endif %}">← Previous Series</a>
+  <strong>Series {{page_no}} / {{total_pages}}</strong>
+  <a href="{{ url_for('sticker_sheet', page=page_no+1) if page_no < total_pages else '#' }}" class="btn {% if page_no >= total_pages %}disabled{% endif %}">Next Series →</a>
+  <button onclick="window.print()">Print This Series</button>
+</div>
+<div class="sheet-meta no-print">{{total_serials}} serials · {{total}} stickers · 2 identical barcode stickers per serial · barcode encodes serial only</div>
+<div class="sticker-sheet-document"><div class="sheet65">
+{% for item in page %}
+<div class="small-sticker">
+  <img class="barcode-img" src="{{url_for('barcode_svg', value=item.serial)}}" alt="Barcode {{item.serial}}">
+  <strong>{{item.serial}}</strong>
+</div>
+{% endfor %}
+{% for blank in range(65-page|length) %}<div class="small-sticker empty-slot"><span>EMPTY</span></div>{% endfor %}
+</div></div>
+</body></html>

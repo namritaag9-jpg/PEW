@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block title %}Reports{% endblock %}{% block content %}
+<div class="grid3"><div class="stat"><small>Total collections</small><b>₹ {{'%.2f'|format(data.revenue)}}</b></div><div class="stat"><small>Total expenses</small><b>₹ {{'%.2f'|format(data.expenses)}}</b></div><div class="stat"><small>Parts billed</small><b>₹ {{'%.2f'|format(data.parts)}}</b></div></div>
+<section class="card"><div class="cardhead"><h3>Jobs by status</h3></div><table><tr><th>Status</th><th>Count</th></tr>{% for x in data.jobs %}<tr><td><span class="pill">{{x.status}}</span></td><td>{{x.n}}</td></tr>{% endfor %}</table></section>
+<div class="actions"><a class="btn" href="{{url_for('export_customers')}}">Export Customers CSV</a><a class="btn primary" href="{{url_for('export_report_pdf',kind='ready')}}">Ready for Delivery PDF</a><a class="btn primary" href="{{url_for('export_report_pdf',kind='repairing')}}">Repair Jobs PDF</a></div>{% endblock %}
