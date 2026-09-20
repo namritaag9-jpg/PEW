@@ -6,4 +6,16 @@
 <div class="mini"><span><b>Accessories:</b> {{j.accessories or '—'}}</span><span><b>Condition:</b> {{j.condition or '—'}}</span></div>
 <table class="ptable"><tr><th>Description</th><th>HSN</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>{% for x in items %}<tr><td>{{x.description}}</td><td>{{x.hsn or '—'}}</td><td>{{x.qty}}</td><td>₹{{'%.2f'|format(x.rate)}}</td><td>₹{{'%.2f'|format(x.qty*x.rate)}}</td></tr>{% endfor %}{% if not items %}<tr><td colspan="5">No parts / labour / service items recorded</td></tr>{% endif %}</table>
 <div class="bottom"><div class="ack"><b>CUSTOMER ACKNOWLEDGEMENT</b><p>I confirm that the appliance and accessories listed above were received by the workshop.</p><div class="sign">Customer Signature</div></div><div class="money"><div>Subtotal <span>₹{{'%.2f'|format(subtotal)}}</span></div><div>Discount <span>₹{{'%.2f'|format(j.discount or 0)}}</span></div><div class="total">TOTAL <span>₹{{'%.2f'|format(total)}}</span></div><div>Paid <span>₹{{'%.2f'|format(paid)}}</span></div><div class="balance">BALANCE <span>₹{{'%.2f'|format(balance)}}</span></div></div></div>
+<div class="job-card-codes">
+  <div class="code-block">
+    <b>SERIAL / BARCODE</b>
+    <div class="serial-large">{{j.serial or j.job_no}}</div>
+    <img class="job-barcode" src="{{url_for('barcode_svg', value=(j.serial or j.job_no))}}" alt="Serial barcode">
+  </div>
+  <div class="qr-block">
+    <img class="job-qr" src="{{url_for('qr_png', value=tracking_url)}}" alt="Scan to track this repair">
+    <b>SCAN TO TRACK</b>
+    <small>{{j.job_no}}</small>
+  </div>
+</div>
 <div class="terms"><b>TERMS:</b> Please produce this job number at delivery. Customer should verify the appliance at collection.</div><div class="pfoot">PATEL ELECTRICALS WORKSHOP · Local Service POS · Printed on {{j.received_at}}</div></div><script>window.onload=()=>setTimeout(()=>window.print(),250)</script></body></html>

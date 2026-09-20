@@ -1444,6 +1444,11 @@ setInterval(() => {
 
 $("result").style.display = "none";
 
+const initialQuery = {{ initial_query|default("")|tojson }};
+if (initialQuery) {
+    $("searchInput").value = initialQuery;
+    trackRepair(initialQuery);
+}
 </script>
 
 </body>

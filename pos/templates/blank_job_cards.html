@@ -3,12 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Job Cards - A4 6 Up</title>
+  <title>Blank Job Cards - A4 6 Up</title>
   <link rel="stylesheet" href="{{url_for('static',filename='css/app.css')}}">
 </head>
 <body class="printbody">
+  <div class="print-controls no-print" style="display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin:8px 0">
+    <a class="btn" href="{{ url_for('blank_job_cards', batch=series_no-1) if series_no > 1 else '#' }}">← Previous Series</a>
+    <strong>Blank Job Card Series {{ series_no }}</strong>
+    <form method="post" action="{{ url_for('continue_job_card_batch') }}" style="display:inline"><button class="btn" type="submit">Continue Series →</button></form>
+    <button type="button" onclick="window.print()">Print This A4</button>
+  </div>
   <div class="a4-job-page six-up">
-    {% for i in range(6) %}
+    {% for card in cards %}
     <section class="a4-job-card professional-job-card">
       <div class="job-card-header">
         <div>
@@ -21,13 +27,21 @@
       <div class="card-intro">Repair &amp; Service Receiving Slip</div>
 
       <div class="job-card-meta">
-        <div><b>JOB / SERIAL NO.</b><span>________________</span></div>
+        <div><b>JOB / SERIAL NO.</b><span>{{ card.serial }}</span></div>
         <div><b>RECEIVED BY</b><span>________________</span></div>
       </div>
 
-      <div class="sticker-slot professional-slot">
-        <span class="slot-title">PASTE SERIAL STICKER HERE</span>
-        <span class="slot-sub">Attach matching sticker to the motor</span>
+      <div class="preprinted-code-box">
+        <div class="code-column">
+          <div class="code-caption">MOTOR MATCHING BARCODE</div>
+          <img class="job-card-barcode" src="{{ card.barcode_url }}" alt="Barcode {{ card.serial }}">
+          <strong class="code-serial">{{ card.serial }}</strong>
+          <div class="code-note">Match this serial with the single motor sticker during allocation.</div>
+        </div>
+        <div class="qr-column">
+          <img class="job-card-qr" src="{{ card.qr_url }}" alt="Tracking QR for {{ card.serial }}">
+          <div class="qr-caption">SCAN TO TRACK</div>
+        </div>
       </div>
 
       <div class="handwriting-section">
@@ -36,7 +50,6 @@
         <div class="field-line"><b>APPLIANCE / MOTOR</b><span></span></div>
         <div class="field-line"><b>BRAND / MODEL</b><span></span></div>
         <div class="field-line"><b>COMPLAINT</b><span></span></div>
-        
       </div>
 
       <div class="job-card-footer">
