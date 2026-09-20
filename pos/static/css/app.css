@@ -89,22 +89,32 @@
 @media(max-width:700px){.stat-link span{font-size:10px}}
 
 .scanner-actions{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.scanner-actions button{margin:0!important}
-/* Improved barcode clarity for 65-up sticker sheet */
-.small-sticker .barcode-img {
-    display: block !important;
-    width: 40mm !important;
-    height: 11mm !important;
-    max-width: 40mm !important;
-    object-fit: fill !important;
-    margin: 0 auto !important;
-}
 
-.small-sticker .barcode {
-    width: 40mm !important;
-    max-width: 40mm !important;
-    height: 11mm !important;
-    overflow: visible !important;
-}
+/* V2.4.1: larger barcode area; shop name removed from 65-up stickers */
+.small-sticker .barcode-img{width:39mm!important;height:10.5mm!important;max-width:39mm!important;object-fit:contain!important}
 .small-sticker strong{font-size:6.2px!important;line-height:1!important}
 
 .report-brand{padding:12px 0 16px;border-bottom:1px solid #e5e9ed;margin-bottom:14px;letter-spacing:.5px}.report-brand b{font-size:18px}.report-brand span{font-size:12px;color:#7b8794}.stat-link span{display:block;font-size:11px;color:#7b8794;margin-top:8px;font-weight:700}
+
+
+/* V2.7 final responsive navigation, visible job actions and non-overlapping barcodes */
+.menu-toggle{display:none;border:1px solid #d7dde2;border-radius:9px;padding:9px 12px;background:#16232d;color:#fff;font-weight:800;cursor:pointer}
+.job-actions{align-items:center;flex-wrap:wrap}
+.job-actions form{display:inline-flex;margin:0}
+.job-actions .action-revoke{background:#fff!important;color:#16232d!important;border:1px solid #16232d!important}
+.job-actions .action-delete,.job-actions .danger{background:#b42318!important;color:#fff!important;border:1px solid #b42318!important}
+.small-sticker .barcode{width:38mm!important;max-width:38mm!important;height:auto!important;overflow:visible!important}
+.small-sticker .barcode-img{display:block!important;width:38mm!important;max-width:38mm!important;height:auto!important;object-fit:contain!important;margin:0 auto!important}
+@media(max-width:700px){
+  .menu-toggle{display:inline-block;order:0;margin-bottom:10px}
+  header{flex-wrap:wrap;gap:8px}
+  .side{width:100%;padding:14px 12px}
+  .side nav,.sidebottom{display:none}
+  .side.open nav{display:grid}
+  .side.open .sidebottom{display:grid;margin-top:12px}
+  .side nav a{font-size:13px;padding:10px}
+  .job-actions{display:flex}
+  .job-actions form,.job-actions a{width:100%}
+  .job-actions button,.job-actions a{width:100%;text-align:center}
+}
+.restore-card{max-width:720px}.restore-card input[type=file]{padding:12px;background:#f8fafb}.loginbox .toast{margin:10px 0}
