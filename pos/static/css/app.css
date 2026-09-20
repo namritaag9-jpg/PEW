@@ -150,38 +150,47 @@
     overflow: hidden !important;
 }
 
-/* ===== FINAL LABEL + BARCODE + TEXT OVERRIDE ===== */
+/* ===== MERGED LABEL + BARCODE + TEXT OVERRIDE ===== */
 @media print {
 
     .small-sticker {
         width: 38.1mm !important;
         height: 21.2mm !important;
         box-sizing: border-box !important;
-        padding: 0.5mm !important;
+        padding: 0.4mm !important;
+        margin: 0 !important;
 
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 0.2mm !important;
+        gap: 0 !important;
         overflow: hidden !important;
     }
 
-    /* Barcode: 0.5 mm margin each side */
+    /* Barcode: Code 2 dimensions */
     .small-sticker .barcode-img {
         display: block !important;
-        width: 37.1mm !important;
-        max-width: 37.1mm !important;
-        height: 11.5mm !important;
+
+        width: 37mm !important;
+        max-width: none !important;
+
+        height: 14.5mm !important;
+        max-height: 14.5mm !important;
+
         margin: 0 auto !important;
         padding: 0 !important;
+
         object-fit: fill !important;
         object-position: center !important;
+
+        transform: scaleX(1.18) !important;
+        transform-origin: center center !important;
     }
 
     .small-sticker .barcode {
-        width: 37.1mm !important;
-        max-width: 37.1mm !important;
+        width: 37mm !important;
+        max-width: none !important;
         margin: 0 auto !important;
     }
 
@@ -191,6 +200,7 @@
     .small-sticker .item-text {
         width: 36.9mm !important;
         max-width: 36.9mm !important;
+
         margin: 0 auto !important;
         padding: 0 !important;
 
@@ -202,5 +212,13 @@
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: clip !important;
+    }
+
+    /* Strong serial text */
+    .small-sticker strong {
+        font-size: 4.5px !important;
+        line-height: 1 !important;
+        margin-top: 0.4mm !important;
+        white-space: nowrap !important;
     }
 }
