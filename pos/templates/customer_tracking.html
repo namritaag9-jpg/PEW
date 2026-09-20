@@ -1,0 +1,1450 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Track Repair | Patel Electricals</title>
+
+<script src="https://unpkg.com/html5-qrcode"
+        type="text/javascript"></script>
+
+<style>
+/* =========================================
+   PATEL ELECTRICALS
+   PREMIUM CUSTOMER TRACKING PAGE
+   ALL CSS INCLUDED
+   ========================================= */
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --text: #172033;
+    --muted: #667085;
+    --border: #e6eaf0;
+    --surface: #ffffff;
+    --background: #f5f7fb;
+    --success: #16a34a;
+    --radius: 22px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", sans-serif;
+    background: var(--background);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.header {
+    background: linear-gradient(135deg, #0f172a, #1e40af);
+    color: white;
+    padding: 28px 20px 95px;
+}
+
+.header-inner {
+    width: min(1120px, 100%);
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 15px;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.22);
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+}
+
+.brand h1 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -.4px;
+}
+
+.brand p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #dbeafe;
+}
+
+.header-tag {
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(255,255,255,.1);
+    border-radius: 100px;
+    padding: 8px 13px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* =========================================
+   LAYOUT
+   ========================================= */
+
+.container {
+    width: min(1120px, 92%);
+    margin: -60px auto 40px;
+    position: relative;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 25px;
+    box-shadow: 0 12px 40px rgba(15,23,42,.05);
+}
+
+.card-title {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -.4px;
+}
+
+.card-subtitle {
+    margin: 8px 0 22px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+}
+
+/* =========================================
+   SEARCH
+   ========================================= */
+
+.input-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475467;
+    margin-bottom: 9px;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-wrap input {
+    width: 100%;
+    height: 53px;
+    border: 1px solid #d0d5dd;
+    border-radius: 13px;
+    outline: none;
+    padding: 0 15px;
+    color: var(--text);
+    background: #fff;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.input-wrap input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px #2563eb14;
+}
+
+.button {
+    width: 100%;
+    border: 0;
+    border-radius: 13px;
+    height: 51px;
+    margin-top: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.button-primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    box-shadow: 0 6px 15px #2563eb25;
+}
+
+.button-primary:hover {
+    transform: translateY(-1px);
+}
+
+.button-secondary {
+    background: #eff4ff;
+    color: #1d4ed8;
+}
+
+.button-secondary:hover {
+    background: #dbeafe;
+}
+
+.button-outline {
+    background: white;
+    color: #344054;
+    border: 1px solid #d0d5dd;
+}
+
+.helper {
+    margin: 12px 0 0;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+}
+
+/* =========================================
+   SCANNER
+   ========================================= */
+
+.scanner-box {
+    margin-top: 16px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #0f172a;
+    display: none;
+}
+
+#reader {
+    width: 100%;
+}
+
+#reader video {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 12px;
+}
+
+#reader img {
+    display: none !important;
+}
+
+.scanner-note {
+    padding: 12px;
+    color: #cbd5e1;
+    font-size: 11px;
+    text-align: center;
+}
+
+.scanner-close {
+    margin: 12px;
+    width: calc(100% - 24px);
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid #475569;
+    color: white;
+    background: #1e293b;
+}
+
+/* =========================================
+   ERROR / LOADING
+   ========================================= */
+
+.message {
+    display: none;
+    border-radius: 12px;
+    padding: 13px;
+    font-size: 12px;
+    margin-top: 15px;
+    line-height: 1.5;
+}
+
+.message.error {
+    background: #fef3f2;
+    border: 1px solid #fecdca;
+    color: #b42318;
+}
+
+.message.info {
+    background: #eff8ff;
+    border: 1px solid #b2ddff;
+    color: #175cd3;
+}
+
+/* =========================================
+   RESULT AREA
+   ========================================= */
+
+#result {
+    display: none;
+}
+
+.result-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.result-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    margin-bottom: 6px;
+}
+
+.result-job {
+    font-size: 21px;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+.status-badge {
+    white-space: nowrap;
+    background: #ecfdf3;
+    border: 1px solid #abefc6;
+    color: #067647;
+    padding: 8px 11px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+/* =========================================
+   PROGRESS BAR
+   ========================================= */
+
+.progress-section {
+    background: #f8fafc;
+    border: 1px solid #edf0f5;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 22px;
+}
+
+.progress-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 13px;
+}
+
+.progress-percent {
+    color: var(--primary);
+}
+
+.progress-track {
+    height: 8px;
+    width: 100%;
+    border-radius: 100px;
+    background: #e2e8f0;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    transition: width .6s ease;
+}
+
+/* =========================================
+   TIMELINE
+   ========================================= */
+
+.timeline {
+    margin-top: 18px;
+}
+
+.timeline-title {
+    font-size: 14px;
+    font-weight: 800;
+    margin: 0 0 18px;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 13px;
+    position: relative;
+    padding-bottom: 22px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-marker {
+    width: 29px;
+    height: 29px;
+    border-radius: 50%;
+    border: 1px solid #d0d5dd;
+    background: white;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    color: #98a2b3;
+    font-size: 12px;
+    font-weight: 800;
+    position: relative;
+    z-index: 1;
+}
+
+.timeline-item:not(:last-child) .timeline-marker::after {
+    content: "";
+    position: absolute;
+    top: 29px;
+    left: 13px;
+    height: 35px;
+    width: 2px;
+    background: #e4e7ec;
+}
+
+.timeline-item.completed .timeline-marker {
+    background: #dcfae6;
+    border-color: #abefc6;
+    color: #067647;
+}
+
+.timeline-item.completed:not(:last-child) .timeline-marker::after {
+    background: #86efac;
+}
+
+.timeline-item.current .timeline-marker {
+    background: #dbeafe;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+    box-shadow: 0 0 0 5px #dbeafe70;
+}
+
+.timeline-content {
+    padding-top: 3px;
+}
+
+.timeline-content h4 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.timeline-content p {
+    margin: 5px 0 0;
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+/* =========================================
+   DETAILS
+   ========================================= */
+
+.details-title {
+    margin: 0 0 15px;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.details {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 1px solid #edf0f5;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 13px 14px;
+    border-bottom: 1px solid #edf0f5;
+    font-size: 12px;
+}
+
+.detail:last-child {
+    border-bottom: 0;
+}
+
+.detail-label {
+    color: var(--muted);
+}
+
+.detail-value {
+    text-align: right;
+    font-weight: 700;
+    max-width: 65%;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #98a2b3;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.footer strong {
+    color: #667085;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (min-width: 850px) {
+
+    .grid {
+        grid-template-columns: 380px 1fr;
+        align-items: start;
+    }
+
+    .search-card {
+        position: sticky;
+        top: 20px;
+    }
+
+    .details {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .detail {
+        border-right: 1px solid #edf0f5;
+    }
+
+    .detail:nth-child(even) {
+        border-right: 0;
+    }
+
+    .detail:nth-last-child(-n+2) {
+        border-bottom: 0;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .header {
+        padding: 23px 15px 85px;
+    }
+
+    .header-tag {
+        display: none;
+    }
+
+    .container {
+        width: 94%;
+        margin-top: -55px;
+    }
+
+    .card {
+        padding: 20px 16px;
+        border-radius: 18px;
+    }
+
+    .result-top {
+        flex-direction: column;
+    }
+
+    .status-badge {
+        align-self: flex-start;
+    }
+
+    .brand h1 {
+        font-size: 17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================
+     HEADER
+     ========================================= -->
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <div class="brand">
+
+            <div class="brand-icon">⚡</div>
+
+            <div>
+                <h1>Patel Electricals</h1>
+                <p>Power • Precision • Trust</p>
+            </div>
+
+        </div>
+
+        <div class="header-tag">
+            CUSTOMER PORTAL
+        </div>
+
+    </div>
+
+</header>
+
+<!-- =========================================
+     MAIN CONTENT
+     ========================================= -->
+
+<main class="container">
+
+    <div class="grid">
+
+        <!-- SEARCH CARD -->
+
+        <section class="card search-card">
+
+            <h2 class="card-title">
+                Track Your Repair
+            </h2>
+
+            <p class="card-subtitle">
+                Get real-time updates about your repair.
+                Scan your barcode or enter your Job ID.
+            </p>
+
+            <label class="input-label" for="searchInput">
+                JOB ID / SERIAL NUMBER
+            </label>
+
+            <div class="input-wrap">
+
+                <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="Enter Job ID or Serial"
+                    autocomplete="off"
+                    autocapitalize="characters">
+
+            </div>
+
+            <button
+                class="button button-primary"
+                id="trackButton"
+                onclick="trackRepair()">
+
+                🔍 Track Repair
+
+            </button>
+
+            <button
+                class="button button-secondary"
+                id="scanButton"
+                onclick="startScanner()">
+
+                📷 Scan Repair Barcode
+
+            </button>
+
+            <div class="scanner-box" id="scannerBox">
+
+                <div id="reader"></div>
+
+                <div class="scanner-note">
+                    Point your camera at the repair barcode.
+                </div>
+
+                <button
+                    class="scanner-close"
+                    onclick="stopScanner()">
+
+                    Close Camera
+
+                </button>
+
+            </div>
+
+            <div
+                id="message"
+                class="message"
+                role="alert">
+            </div>
+
+            <p class="helper">
+                Your repair serial number is printed on your sticker.
+            </p>
+
+        </section>
+
+
+        <!-- RESULT CARD -->
+
+        <section class="card" id="result">
+
+            <div class="result-top">
+
+                <div>
+                    <div class="result-label">
+                        REPAIR JOB
+                    </div>
+
+                    <div class="result-job" id="jobNo">
+                        —
+                    </div>
+                </div>
+
+                <span class="status-badge" id="statusBadge">
+                    SEARCHING
+                </span>
+
+            </div>
+
+
+            <!-- PROGRESS -->
+
+            <div class="progress-section">
+
+                <div class="progress-heading">
+
+                    <span>Repair Progress</span>
+
+                    <span
+                        class="progress-percent"
+                        id="progressPercent">
+
+                        0%
+
+                    </span>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        id="progressFill">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TIMELINE -->
+
+            <div class="timeline">
+
+                <h3 class="timeline-title">
+                    Repair Journey
+                </h3>
+
+                <div id="timelineContainer">
+
+                    <!-- Generated by JavaScript -->
+
+                </div>
+
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div style="margin-top: 28px;">
+
+                <h3 class="details-title">
+                    Appliance Details
+                </h3>
+
+                <div class="details">
+
+                    <div class="detail">
+
+                        <span class="detail-label">
+                            Serial Number
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="serialValue">
+
+                            —
+
+                        </span>
+
+                    </div>
+
+                    <div class="detail">
+
+                        <span class="detail-label">
+                            Appliance
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="applianceValue">
+
+                            —
+
+                        </span>
+
+                    </div>
+
+                    <div class="detail">
+
+                        <span class="detail-label">
+                            Brand
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="brandValue">
+
+                            —
+
+                        </span>
+
+                    </div>
+
+                    <div class="detail">
+
+                        <span class="detail-label">
+                            Model
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="modelValue">
+
+                            —
+
+                        </span>
+
+                    </div>
+
+                    <div class="detail">
+
+                        <span class="detail-label">
+                            Received On
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="receivedValue">
+
+                            —
+
+                        </span>
+
+                    </div>
+
+                    <div class="detail">
+
+                        <span class="detail-label">
+                            Delivered On
+                        </span>
+
+                        <span
+                            class="detail-value"
+                            id="deliveredValue">
+
+                            Not delivered
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="button button-outline"
+                onclick="trackRepair()">
+
+                ↻ Refresh Status
+
+            </button>
+
+            <p class="helper">
+                Status information updates when your repair record changes.
+            </p>
+
+        </section>
+
+    </div>
+
+
+    <footer class="footer">
+
+        <strong>Patel Electricals Workshop</strong>
+        <br>
+
+        Power • Precision • Trust
+        <br>
+
+        For assistance, contact our workshop.
+
+    </footer>
+
+</main>
+
+
+<script>
+/* =========================================
+   CUSTOMER TRACKING JAVASCRIPT
+   ========================================= */
+
+let scanner = null;
+let scannerRunning = false;
+let currentQuery = "";
+
+/*
+ * API ENDPOINT
+ *
+ * Uses your existing public tracking API.
+ */
+const TRACK_API = "/api/public/track";
+
+
+/* =========================================
+   ELEMENT HELPERS
+   ========================================= */
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+function text(value, fallback = "—") {
+    if (value === null || value === undefined || value === "") {
+        return fallback;
+    }
+
+    return String(value);
+}
+
+
+/* =========================================
+   MESSAGE
+   ========================================= */
+
+function showMessage(message, type = "error") {
+
+    const el = $("message");
+
+    el.textContent = message;
+    el.className = "message " + type;
+    el.style.display = "block";
+
+}
+
+function clearMessage() {
+
+    $("message").textContent = "";
+    $("message").style.display = "none";
+
+}
+
+
+/* =========================================
+   TRACK REPAIR
+   ========================================= */
+
+async function trackRepair(value = null) {
+
+    const inputValue = value !== null
+        ? value
+        : $("searchInput").value.trim();
+
+    const query = String(inputValue).trim();
+
+    clearMessage();
+
+    if (!query) {
+
+        showMessage(
+            "Please enter a Job ID or serial number.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    currentQuery = query;
+
+    const button = $("trackButton");
+
+    button.disabled = true;
+    button.textContent = "Searching...";
+
+    $("result").style.display = "none";
+
+    try {
+
+        /*
+         * Existing public tracking API.
+         *
+         * This format supports q=VALUE.
+         */
+        const url = TRACK_API + "?q=" + encodeURIComponent(query);
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            },
+            cache: "no-store"
+        });
+
+        let data = {};
+
+        try {
+            data = await response.json();
+        } catch (error) {
+            data = {};
+        }
+
+        if (!response.ok || data.found === false) {
+
+            throw new Error(
+                data.error ||
+                data.message ||
+                "Repair not found. Check your Job ID or serial number."
+            );
+
+        }
+
+        /*
+         * If the API returns a direct repair object,
+         * use it. If it returns { job: {...} },
+         * use the nested object.
+         */
+        const job = data.job || data.data || data;
+
+        renderResult(job);
+
+        $("result").style.display = "block";
+
+    } catch (error) {
+
+        showMessage(
+            error.message ||
+            "Unable to find the repair. Please try again.",
+            "error"
+        );
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "🔍 Track Repair";
+
+    }
+
+}
+
+
+/* =========================================
+   RENDER REPAIR RESULT
+   ========================================= */
+
+function renderResult(job) {
+
+    const status = text(
+        job.status || job.current_status,
+        "Unknown"
+    );
+
+    const serial = text(
+        job.serial || job.serial_no || job.serial_number
+    );
+
+    const jobNo = text(
+        job.job_no ||
+        job.job_id ||
+        job.job_number ||
+        job.id,
+        serial
+    );
+
+    $("jobNo").textContent = jobNo;
+
+    $("statusBadge").textContent =
+        status.toUpperCase();
+
+    $("serialValue").textContent = serial;
+
+    $("applianceValue").textContent = text(
+        job.appliance || job.appliance_name
+    );
+
+    $("brandValue").textContent = text(
+        job.brand
+    );
+
+    $("modelValue").textContent = text(
+        job.model
+    );
+
+    $("receivedValue").textContent = text(
+        job.received_at ||
+        job.received_date ||
+        job.created_at
+    );
+
+    $("deliveredValue").textContent = text(
+        job.delivered_at ||
+        job.delivered_date,
+        "Not delivered"
+    );
+
+    const progress = calculateProgress(status);
+
+    $("progressFill").style.width = progress + "%";
+
+    $("progressPercent").textContent =
+        progress + "%";
+
+    renderTimeline(status);
+
+}
+
+
+/* =========================================
+   STATUS LOGIC
+   ========================================= */
+
+const statuses = [
+    {
+        name: "Received",
+        description: "Your appliance has been received."
+    },
+    {
+        name: "Approved",
+        description: "Repair assessment has been recorded."
+    },
+    {
+        name: "Repairing",
+        description: "Our workshop is working on your appliance."
+    },
+    {
+        name: "Testing",
+        description: "The appliance is being tested."
+    },
+    {
+        name: "Ready",
+        description: "Your appliance is ready for collection."
+    },
+    {
+        name: "Delivered",
+        description: "The appliance has been delivered."
+    }
+];
+
+
+/*
+ * Maps known status names to the timeline.
+ *
+ * If your POS uses different status names,
+ * add them here.
+ */
+
+function normalizeStatus(status) {
+
+    const value = String(status)
+        .toLowerCase()
+        .trim();
+
+    if (
+        value.includes("deliver") ||
+        value.includes("completed")
+    ) {
+        return 5;
+    }
+
+    if (
+        value.includes("ready") ||
+        value.includes("collection")
+    ) {
+        return 4;
+    }
+
+    if (
+        value.includes("test") ||
+        value.includes("testing")
+    ) {
+        return 3;
+    }
+
+    if (
+        value.includes("repair") ||
+        value.includes("progress") ||
+        value.includes("working")
+    ) {
+        return 2;
+    }
+
+    if (
+        value.includes("approved") ||
+        value.includes("estimate")
+    ) {
+        return 1;
+    }
+
+    return 0;
+
+}
+
+
+function calculateProgress(status) {
+
+    const value = String(status).toLowerCase();
+
+    if (
+        value.includes("cancel") ||
+        value.includes("reject")
+    ) {
+        return 0;
+    }
+
+    const index = normalizeStatus(status);
+
+    return Math.round(
+        ((index + 1) / statuses.length) * 100
+    );
+
+}
+
+
+function renderTimeline(status) {
+
+    const activeIndex = normalizeStatus(status);
+
+    const container = $("timelineContainer");
+
+    container.innerHTML = "";
+
+    statuses.forEach((item, index) => {
+
+        const completed = index < activeIndex;
+        const current = index === activeIndex;
+
+        const wrapper = document.createElement("div");
+
+        wrapper.className =
+            "timeline-item" +
+            (completed ? " completed" : "") +
+            (current ? " current" : "");
+
+        const marker = document.createElement("div");
+
+        marker.className = "timeline-marker";
+
+        marker.textContent =
+            completed ? "✓" : (index + 1);
+
+        const content = document.createElement("div");
+
+        content.className = "timeline-content";
+
+        const title = document.createElement("h4");
+
+        title.textContent = item.name;
+
+        const description = document.createElement("p");
+
+        description.textContent = current
+            ? "Current status: " + item.description
+            : completed
+                ? "Completed"
+                : item.description;
+
+        content.appendChild(title);
+        content.appendChild(description);
+
+        wrapper.appendChild(marker);
+        wrapper.appendChild(content);
+
+        container.appendChild(wrapper);
+
+    });
+
+}
+
+
+/* =========================================
+   BARCODE SCANNER
+   ========================================= */
+
+async function startScanner() {
+
+    if (scannerRunning) {
+        return;
+    }
+
+    clearMessage();
+
+    $("scannerBox").style.display = "block";
+
+    $("scanButton").disabled = true;
+
+    try {
+
+        scanner = new Html5Qrcode("reader");
+
+        await scanner.start(
+            {
+                facingMode: "environment"
+            },
+            {
+                fps: 10,
+                qrbox: {
+                    width: 280,
+                    height: 120
+                }
+            },
+            (decodedText) => {
+
+                const value = decodedText.trim();
+
+                if (!value) {
+                    return;
+                }
+
+                $("searchInput").value = value;
+
+                trackRepair(value);
+
+                stopScanner();
+
+            },
+            () => {
+                // Ignore unsuccessful scan frames.
+            }
+        );
+
+        scannerRunning = true;
+
+    } catch (error) {
+
+        $("scannerBox").style.display = "none";
+
+        showMessage(
+            "Camera access failed. Allow camera permissions or enter the serial manually.",
+            "error"
+        );
+
+        scanner = null;
+        scannerRunning = false;
+
+    } finally {
+
+        $("scanButton").disabled = false;
+
+    }
+
+}
+
+
+async function stopScanner() {
+
+    if (!scanner) {
+
+        $("scannerBox").style.display = "none";
+
+        return;
+
+    }
+
+    try {
+
+        if (scannerRunning) {
+            await scanner.stop();
+        }
+
+        scanner.clear();
+
+    } catch (error) {
+
+        console.warn("Scanner stop:", error);
+
+    }
+
+    scanner = null;
+    scannerRunning = false;
+
+    $("scannerBox").style.display = "none";
+
+}
+
+
+/* =========================================
+   ENTER KEY SEARCH
+   ========================================= */
+
+$("searchInput").addEventListener("keydown", (event) => {
+
+    if (event.key === "Enter") {
+        trackRepair();
+    }
+
+});
+
+
+/* =========================================
+   AUTO REFRESH
+   ========================================= */
+
+setInterval(() => {
+
+    if (
+        currentQuery &&
+        $("result").style.display !== "none"
+    ) {
+
+        trackRepair(currentQuery);
+
+    }
+
+}, 30000);
+
+
+/* =========================================
+   INITIAL STATE
+   ========================================= */
+
+$("result").style.display = "none";
+
+</script>
+
+</body>
+</html>
