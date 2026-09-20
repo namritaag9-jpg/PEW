@@ -1,6 +1,4 @@
-from pathlib import Path
-
-template = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -377,8 +375,6 @@ template = r'''<!DOCTYPE html>
 </script>
 </body>
 </html>
-'''
 
-path = Path("/mnt/data/customer_tracking_history.html")
 path.write_text(template, encoding="utf-8")
 print(f"Created {path}")
